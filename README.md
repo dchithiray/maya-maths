@@ -1,2 +1,2 @@
 # maya-maths
-Maths  - Fundamentals
+Interactive Maths
