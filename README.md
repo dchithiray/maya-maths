@@ -1,2 +1,0 @@
-# maya-maths
-Interactive Maths
