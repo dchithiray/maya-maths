@@ -1,0 +1,8 @@
+Maya Maths Foundation 2.0.3d — Final QA Fixes Test
+
+Changes from 2.0.3c:
+- Practice hints are locked until Maya has entered and checked an answer.
+- Discover & Learn remains the teaching area; Practice now tests recall before support is shown.
+- Removed zero-set visuals (for example, 8×3 now uses 2 sets of 8 + 1 set of 8).
+- 8× word-problem Challenge visual now explicitly shows the separate −3 after building 56: (5×8)+(2×8)−3 = 56−3 = 53.
+- Preserved the app-wide convention: in the N× table, each set contains N items; the other factor is the number of sets.
