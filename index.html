@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#eef6ff">
+<title>Maya Maths — Foundation 2.0.5f Word Problem Progression</title>
+<style>
+:root{
+  --navy:#17324d;--blue:#347fb8;--blue-soft:#eaf5ff;--cream:#fffaf0;
+  --gold:#f6c453;--green:#3f9967;--green-soft:#e9f7ef;--red:#b42318;
+  --muted:#61788d;--line:#dce7ef;--shadow:0 14px 34px rgba(23,50,77,.13)
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:"Trebuchet MS","Arial Rounded MT Bold",Arial,sans-serif;color:var(--navy);background:linear-gradient(135deg,var(--cream),#eef7ff 72%)}
+button,input,select{font:inherit}button{cursor:pointer;touch-action:manipulation}
+.app{min-height:100vh;display:flex;flex-direction:column}
+header{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;gap:12px}
+.brand{font-weight:900;font-size:clamp(1.2rem,3vw,1.55rem)}
+.chip{background:#ffffffcc;border:1px solid #17324d1a;border-radius:999px;padding:8px 12px;font-size:.82rem;font-weight:800}
+main{width:min(980px,calc(100% - 24px));margin:auto;flex:1;padding:8px 0 28px}
+.screen{display:none}.screen.active{display:block;animation:up .25s ease}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:#fffffff2;border:1px solid #17324d14;box-shadow:var(--shadow);border-radius:24px;padding:clamp(20px,4vw,38px)}
+.hero{text-align:center}.icon{font-size:clamp(2.8rem,8vw,5rem);line-height:1;margin-bottom:10px}
+h1{font-size:clamp(2.1rem,7vw,4rem);line-height:1.03;margin:0 0 10px}
+h2{font-size:clamp(1.45rem,4vw,2.35rem);margin:0 0 12px}
+h3{margin:0 0 10px}.sub{font-size:clamp(1rem,2.5vw,1.18rem);color:#4b647c;margin:0 0 20px}
+.primary,.secondary,.nav,.tile{border-radius:16px;padding:14px 20px;font-weight:900;border:1px solid transparent}
+.primary{background:var(--blue);color:white;box-shadow:0 8px 18px #347fb83d}
+.secondary,.nav{background:white;color:var(--navy);border-color:#17324d24}
+.primary:disabled,.secondary:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+.entry{min-height:155px;border-radius:22px;padding:24px;text-align:left;border:2px solid transparent;box-shadow:0 8px 18px #17324d14}
+.entry.child{background:var(--blue);color:white}.entry.adult{background:white;color:var(--navy);border-color:#17324d20}
+.entry .big{display:block;font-size:1.35rem;font-weight:900;margin:10px 0 6px}.entry .emoji{font-size:2.5rem}
+.lesson-summary{background:var(--blue-soft);border-radius:18px;padding:18px;text-align:left}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.mission{background:var(--blue-soft);border-radius:22px;padding:22px;text-align:center}
+.fact-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+.pill{display:inline-block;border-radius:999px;background:white;border:1px solid #17324d1a;padding:8px 12px;font-weight:900}
+.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.menu button{min-height:135px;border-radius:20px;padding:20px 14px;background:white;color:var(--navy);border:1px solid #17324d1c;box-shadow:0 8px 18px #17324d12}
+.menu .mi{display:block;font-size:2.5rem;margin-bottom:10px}.menu .mt{font-size:1.1rem;font-weight:900}.menu .mc{display:block;color:var(--muted);font-size:.88rem;margin-top:6px}
+.equation{font-size:clamp(2.8rem,10vw,5.4rem);font-weight:900;text-align:center;margin:20px 0}
+.flash,.pin,input[type=text],input[type=number],input[type=password],select{width:100%;border:2px solid #cdddea;border-radius:14px;padding:12px;color:var(--navy);background:white;outline:none}
+.flash{max-width:240px;font-size:2rem;text-align:center;font-weight:900;display:block;margin:auto}
+.flash:focus,input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 4px #347fb824}
+.feedback{min-height:76px;margin-top:16px;border-radius:18px;padding:15px 17px;background:#f7fafc;font-weight:700;line-height:1.45}
+.feedback.success{background:var(--green-soft);border:1px solid #3f996755}.feedback.try{background:#fff7e8;border:1px solid #f6c45380}
+.parent-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0}
+.tab{background:white;border:1px solid #17324d24;border-radius:14px;padding:12px 8px;font-weight:900;color:var(--navy)}
+.tab.active{background:var(--blue);color:white}
+.panel{display:none}.panel.active{display:block}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.stat{background:var(--blue-soft);border-radius:18px;padding:16px;text-align:center}.stat strong{display:block;font-size:1.8rem}
+.factor-grid,.fact-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:9px;margin:14px 0}
+.factor-btn,.fact-btn{background:var(--blue-soft);border:2px solid transparent;border-radius:14px;padding:13px 7px;font-weight:900;color:var(--navy)}
+.factor-btn.selected,.fact-btn.selected{background:var(--green-soft);border-color:var(--green)}
+.form-row{margin:15px 0}.form-row label{display:block;font-weight:900;margin-bottom:7px}
+.switch-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.switch-row input{width:22px;height:22px}
+.history{width:100%;border-collapse:collapse}.history th,.history td{padding:10px;border-bottom:1px solid var(--line);text-align:left}
+.notice{background:#fff7e8;border:1px solid #f6c45380;border-radius:16px;padding:14px;line-height:1.45}
+.good{background:var(--green-soft);border:1px solid #3f996755;border-radius:16px;padding:14px}
+.hidden{display:none!important}.danger{background:var(--red)!important;color:white!important;border-color:var(--red)!important}
+.small{font-size:.9rem;color:var(--muted)}footer{text-align:center;padding:15px 20px 22px;color:var(--muted);font-size:.82rem}
+
+.visual-board{margin:16px 0;padding:14px;border:1px solid #cfe0ee;border-radius:18px;background:#fff;text-align:left}
+.visual-title{font-weight:900;margin-bottom:10px;color:var(--blue)}
+.sets-row{display:flex;align-items:flex-end;justify-content:center;gap:8px;flex-wrap:wrap;margin:10px 0}
+.set-cluster{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;align-items:center}
+.set-card{min-width:34px;padding:6px 5px;border:2px solid #9fc7e8;border-radius:10px;background:#f8fcff;display:grid;grid-template-columns:repeat(2,8px);gap:4px;justify-content:center;position:relative}
+.set-card.crossed{opacity:.55;border-style:dashed}.set-card.crossed:after{content:'×';position:absolute;inset:0;display:grid;place-items:center;font-size:2.2rem;color:var(--red);font-weight:900}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--blue)}
+.math-line{text-align:center;font-weight:900;font-size:1.05rem;margin:8px 0}.math-line.big{font-size:1.25rem;color:#174f82}
+.visual-plus,.visual-minus{font-size:1.7rem;font-weight:900;align-self:center}.cluster-label{text-align:center;font-weight:800;font-size:.9rem;margin-top:5px}
+.discover-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.discover-card{border:1px solid #d8e6f0;border-radius:16px;padding:12px;background:#fff}
+.fact-memory{display:flex;justify-content:center;gap:30px;font-size:1.4rem;font-weight:900;margin:10px 0;letter-spacing:.04em}
+.partitioned-card{min-width:48px;padding:7px 6px;border:2px solid #9fc7e8;border-radius:10px;background:#f8fcff;display:flex;gap:6px;justify-content:center;align-items:center}
+.partition-part{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;max-width:22px}.partition-divider{width:2px;align-self:stretch;background:#9fc7e8;border-radius:2px}
+.clock-wrap{display:flex;justify-content:center;margin:12px 0}.clock-face{width:260px;height:260px;border:5px solid #9fc7e8;border-radius:50%;background:#fff;position:relative;box-shadow:inset 0 0 0 8px #f3f9fe}
+.clock-number{position:absolute;transform:translate(-50%,-50%);font-weight:900;color:var(--navy);background:var(--blue-soft);width:48px;height:48px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid #cfe0ee;line-height:1.05}.clock-count{font-size:1rem}.clock-minute{font-size:.62rem;color:var(--muted);font-weight:800;margin-top:2px;white-space:nowrap}
+.clock-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;font-weight:900;color:var(--blue);line-height:1.2}.clock-center:before{content:'';display:block;width:10px;height:10px;background:var(--blue);border-radius:50%;margin:0 auto 4px}
+.clock-sequence{text-align:center;font-weight:900;word-spacing:8px;line-height:1.8;margin-top:10px}
+.flow-visual{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0}.flow-step{background:var(--blue-soft);border:1px solid #cfe0ee;border-radius:12px;padding:10px 12px;font-weight:900}.flow-arrow{font-size:1.35rem;font-weight:900;color:var(--blue)}
+
+@media(max-width:760px){.discover-grid{grid-template-columns:1fr}.set-card{min-width:30px}.fact-memory{gap:18px;font-size:1.2rem}}
+@media(max-width:760px){
+  .entry-grid,.menu{grid-template-columns:1fr}.entry{min-height:120px}
+  .parent-tabs{grid-template-columns:1fr 1fr}.stats-grid{grid-template-columns:1fr 1fr}
+  .factor-grid,.fact-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand">🧩 Maya Maths</div><div class="chip" id="versionChip">Foundation 2.0.5f Word Problem Progression</div></header>
+<main>
+<section id="generalHome" class="screen active">
+  <div class="card hero">
+    <div class="icon">✨</div><h1>Maya Maths</h1>
+    <p class="sub">Helping children become confident mathematical thinkers.</p>
+    <div class="entry-grid">
+      <button id="enterLearner" class="entry child"><span class="emoji">🌟</span><span class="big" id="learnerEntryTitle">Maya Practice</span><span>Continue today’s maths mission.</span></button>
+      <button id="enterParentLogin" class="entry adult"><span class="emoji">🔒</span><span class="big">Parent &amp; Tutor</span><span>Set lessons and review progress.</span></button>
+    </div>
+    <div class="lesson-summary"><strong>Today’s lesson</strong><div id="homeLessonText" style="margin-top:6px"></div></div>
+  </div>
+</section>
+
+<section id="learnerHome" class="screen">
+  <div class="topbar"><div><h2 id="learnerWelcome">Welcome back!</h2><div class="small">Ready for today’s maths adventure?</div></div></div>
+  <div class="card">
+    <div class="mission"><div class="small">Today’s mission</div><h2 id="missionName">The Amazing Eights</h2><div id="missionFacts" class="fact-pills"></div></div>
+    <div class="menu">
+      <button id="discoverBtn"><span class="mi">🧠</span><span class="mt">Discover &amp; Learn</span><span class="mc" id="discoverCaption"></span></button>
+      <button id="practiceStart"><span class="mi">⚡</span><span class="mt">Start Practice</span><span class="mc">Build confidence using today’s selected facts.</span></button>
+      <button id="challengeBtn"><span class="mi">🎯</span><span class="mt">Challenge</span><span class="mc" id="challengeCaption"></span></button>
+    </div>
+  </div>
+</section>
+
+<section id="practice" class="screen">
+  <div class="topbar"><div id="practiceProgress" style="font-weight:900"></div><button class="nav" data-learner-home>🏠 Learner Home</button></div>
+  <div class="card">
+    <p class="sub" style="text-align:center">Take your time. Accuracy comes before speed.</p>
+    <div id="equation" class="equation"></div>
+    <input id="answer" class="flash" inputmode="numeric" aria-label="Your answer">
+    <div class="actions"><button id="thinkBtn" class="secondary">🧠 Another Way to Think</button><button id="checkBtn" class="primary">Check Answer</button></div>
+    <div id="feedback" class="feedback">Type your answer, or explore another way to think.</div>
+    <div class="actions"><button id="nextBtn" class="primary hidden">Next Question</button></div>
+  </div>
+</section>
+
+<section id="complete" class="screen">
+  <div class="card hero"><div class="icon">🌟</div><h2 id="completeTitle">Fantastic work!</h2><p id="completeText" class="sub"></p>
+  <div class="actions"><button id="practiceAgain" class="primary">Practice Again</button><button class="secondary" data-learner-home>🏠 Learner Home</button></div></div>
+</section>
+
+<section id="learn" class="screen">
+  <div class="topbar"><button class="nav" data-learner-home>🏠 Learner Home</button></div>
+  <div class="card hero"><div class="icon" id="learnIcon">🧠</div><h2 id="learnTitle"></h2><p class="sub" id="learnSub"></p><div class="notice" id="learnBody"></div><div class="actions"><button class="primary" id="learnPractice">Start Practice</button></div></div>
+</section>
+
+<section id="challenge" class="screen">
+  <div class="topbar"><button class="nav" data-learner-home>🏠 Learner Home</button></div>
+  <div class="card hero"><div class="icon">🎯</div><h2 id="challengeTitle">Challenge</h2><div class="pill" id="challengeLevel">Guided Practice</div><p class="sub" id="challengeQuestion"></p><input id="challengeAnswer" class="flash" inputmode="numeric"><div class="actions"><button id="challengeCheck" class="primary">Check Answer</button><button id="challengeNext" class="secondary hidden">Next Challenge</button></div><div id="challengeFeedback" class="feedback">Type your answer.</div><div id="challengeWorking" class="notice hidden"></div></div>
+</section>
+
+<section id="parentLogin" class="screen">
+  <div class="topbar"><div><h2>Parent &amp; Tutor</h2><div class="small">Protected adult area</div></div><button class="nav" data-general-home>🏠 Home</button></div>
+  <div class="card hero"><div class="icon">🔒</div><p class="sub">Enter the parent PIN.</p><input id="pinInput" class="pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••"><div id="pinFeedback" class="feedback"></div><div class="actions"><button id="pinCheck" class="primary">Enter Parent &amp; Tutor</button></div></div>
+</section>
+
+<section id="parentArea" class="screen">
+  <div class="topbar"><div><h2>Parent &amp; Tutor</h2><div class="small" id="parentSubtitle"></div></div><button class="nav" data-general-home>Exit</button></div>
+  <div class="parent-tabs">
+    <button class="tab active" data-tab="dashboard">Dashboard</button>
+    <button class="tab" data-tab="lesson">Lesson Setup</button>
+    <button class="tab" data-tab="journal">Journal</button>
+    <button class="tab" data-tab="settings">Settings</button>
+  </div>
+
+  <div id="panel-dashboard" class="panel active">
+    <div class="stats-grid">
+      <div class="stat"><strong id="statSessions">0</strong>Sessions</div>
+      <div class="stat"><strong id="statAccuracy">—</strong>Accuracy</div>
+      <div class="stat"><strong id="statIndependent">—</strong>Independent</div>
+      <div class="stat"><strong id="statStrategies">0</strong>Strategies</div>
+    </div>
+    <div class="card" style="margin-bottom:16px"><h3>Current lesson</h3><div id="dashboardLesson"></div><div class="actions" style="justify-content:flex-start"><button class="secondary" data-open-tab="lesson">Edit Lesson</button></div></div>
+    <div class="card" style="margin-bottom:16px"><h3>Facts needing more practice</h3><div id="weakFacts" class="notice">No difficult facts recorded yet.</div></div>
+    <div class="actions"><button id="launchLearner" class="primary">Launch Learner Practice</button></div>
+  </div>
+
+  <div id="panel-lesson" class="panel">
+    <div class="card">
+      <h3>Set today’s lesson</h3>
+      <div class="form-row"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><label>Choose factor</label><button id="clearWholeLesson" type="button" class="nav">Clear All</button></div><div id="factorGrid" class="factor-grid"></div></div>
+      <div class="form-row"><label>Choose facts</label><div id="factGrid" class="fact-grid"></div></div>
+      <div class="form-row"><label for="questionCount">Questions per session</label><select id="questionCount"><option value="5">5 questions</option><option value="10">10 questions</option><option value="15">15 questions</option></select></div>
+      <div class="actions"><button id="saveLesson" class="primary">Save Today’s Lesson</button></div><div id="lessonSaveMessage" class="feedback hidden"></div>
+    </div>
+  </div>
+
+  <div id="panel-journal" class="panel">
+    <div class="card" style="margin-bottom:16px">
+      <h3>Facts to Practise</h3>
+      <p class="small">This view highlights facts that are repeatedly difficult, not just one-off slips.</p>
+      <div style="overflow:auto"><table class="history"><thead><tr><th>Fact</th><th>Attempts</th><th>First try</th><th>Independent</th><th>Recent</th><th>Status</th></tr></thead><tbody id="factProgressBody"></tbody></table></div>
+    </div>
+    <div class="card"><h3 id="journalTitle">Learning Journal</h3><div style="overflow:auto"><table class="history"><thead><tr><th>Date</th><th>Factor</th><th>Score</th><th>Independent</th><th>Strategies</th></tr></thead><tbody id="historyBody"></tbody></table></div></div>
+  </div>
+
+  <div id="panel-settings" class="panel">
+    <div class="card" style="margin-bottom:16px">
+      <h3>Learner Profile</h3>
+      <div class="form-row"><label for="learnerName">Child’s first name</label><input id="learnerName" type="text" maxlength="30"></div>
+      <div class="form-row"><label for="yearLevel">Year level</label><select id="yearLevel"><option>Year 3</option><option>Year 4</option><option>Year 5</option><option selected>Year 6</option><option>Year 7</option></select></div>
+      <div class="form-row"><label for="encouragement">Preferred encouragement</label><select id="encouragement"><option>Fantastic work!</option><option>Great job!</option><option>Well done!</option><option>Keep going — you’re learning!</option></select></div>
+      <div class="actions"><button id="saveProfile" class="primary">Save Learner Profile</button></div><div id="profileMessage" class="feedback hidden"></div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <h3>Practice Settings</h3>
+      <label class="switch-row"><span>Allow “Another Way to Think”</span><input id="allowStrategies" type="checkbox"></label>
+      <label class="switch-row"><span>Show Discover and Challenge</span><input id="showActivities" type="checkbox"></label>
+      <label class="switch-row"><span>Mix question order</span><input id="mixOrder" type="checkbox"></label>
+      <div id="settingsMessage" class="feedback hidden"></div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <h3>Maya iPad Entry</h3>
+      <p class="small">Use the direct learner link on the child’s iPad. It opens in the ring-fenced learner area.</p>
+      <div class="notice"><code id="learnerLinkText">?mode=learner</code></div>
+    </div>
+    <div class="card">
+      <h3>Learning History</h3>
+      <p class="small"><strong>Maya’s learning history is preserved.</strong> Starting a new lesson, changing selected facts, clearing Lesson Setup, or beginning a new Practice cycle does not delete historical results.</p>
+      <div class="notice">The Journal uses this history to identify recurring difficult facts over time.</div>
+      <details style="margin-top:14px">
+        <summary style="cursor:pointer;font-weight:700">Advanced data controls</summary>
+        <div style="margin-top:12px;padding:12px;border:1px solid #efb4b4;border-radius:12px;background:#fff7f7">
+          <strong>Permanent deletion</strong>
+          <p class="small">Only use this if you intentionally want to erase Maya’s complete learning history on this device. This cannot be undone.</p>
+          <label for="deleteHistoryConfirm">Type <strong>DELETE</strong> to confirm</label>
+          <input id="deleteHistoryConfirm" type="text" autocomplete="off" placeholder="DELETE" style="max-width:180px;margin-top:6px">
+          <div class="actions" style="justify-content:flex-start;margin-top:10px"><button id="deleteHistory" class="danger" disabled>Delete Learning History</button></div>
+          <div id="resetMessage" class="feedback hidden"></div>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+</main>
+<footer>Maya Maths · Foundation 2.0.5f Word Problem Progression</footer>
+</div>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const screens=[...document.querySelectorAll('.screen')];
+const defaults={
+  profile:{name:'Maya',year:'Year 6',encouragement:'Fantastic work!'},
+  lesson:{factor:8,facts:[3,4,6,7,8],questions:10},
+  settings:{allowStrategies:true,showActivities:true,mixOrder:true},
+  stats:{sessions:[],weak:{},facts:{}}
+};
+function read(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
+function write(key,value){localStorage.setItem(key,JSON.stringify(value))}
+function showConfirmation(element,message,type='success'){
+  element.className=`feedback ${type}`;
+  element.textContent=message;
+  element.classList.remove('hidden');
+  clearTimeout(element._hideTimer);
+  element._hideTimer=setTimeout(()=>element.classList.add('hidden'),3000);
+}
+let profile=read('mm_profile',defaults.profile);
+let lesson=read('mm_lesson',defaults.lesson);
+// Backward-compatible lesson model: selections maps each selected table to its selected facts.
+if(!lesson.selections){ lesson.selections={}; lesson.selections[String(lesson.factor||8)]=lesson.facts||[1,2,3,4,5,6,7,8,9,10,11,12]; }
+let settings=read('mm_settings',defaults.settings);
+let stats=read('mm_stats',defaults.stats);
+if(!stats.sessions)stats.sessions=[];if(!stats.weak)stats.weak={};if(!stats.facts)stats.facts={};
+let tempSelections={}; Object.entries(lesson.selections).forEach(([f,fs])=>tempSelections[f]=new Set(fs));
+function selectedFactors(obj=tempSelections){return Object.keys(obj).map(Number).sort((a,b)=>a-b)}
+function primaryFactor(){return selectedFactors(lesson.selections)[0]||lesson.factor||8}
+function lessonFactPairs(){return selectedFactors(lesson.selections).flatMap(f=>(lesson.selections[String(f)]||[]).map(n=>({f,n})))}
+function show(id){screens.forEach(s=>s.classList.toggle('active',s.id===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='parentArea')renderParent();if(id==='learnerHome')renderLearner()}
+const learnerMode = new URLSearchParams(location.search).get('mode')==='learner';
+function learnerHome(){show('learnerHome')}
+function generalHome(){show('generalHome')}
+function goHome(){ learnerMode ? learnerHome() : generalHome(); }
+document.querySelectorAll('[data-general-home]').forEach(b=>b.addEventListener('click',goHome));
+document.querySelectorAll('[data-learner-home]').forEach(b=>b.addEventListener('click',learnerHome));
+$('enterLearner').addEventListener('click',learnerHome);
+$('enterParentLogin').addEventListener('click',()=>show('parentLogin'));
+$('pinCheck').addEventListener('click',()=>{
+  if($('pinInput').value==='2468'){ $('pinFeedback').textContent=''; $('pinInput').value=''; show('parentArea');}
+  else{$('pinFeedback').className='feedback try';$('pinFeedback').textContent='That PIN is not correct.';$('pinInput').value='';}
+});
+$('pinInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('pinCheck').click()});
+function missionTitle(f){return f===3?'Terrific Threes':f===4?'Double-Doubles Fours':f===5?'High Five':f===6?'Super Sixes':f===7?'The Clever Sevens':f===8?'The Amazing Eights':f===9?'The Secret of Nine':`The ${f} Times Table`}
+function lessonLabel(){const fs=selectedFactors(lesson.selections);return fs.length===1?missionTitle(fs[0]):`Mixed tables: ${fs.map(f=>'×'+f).join(' + ')}`}
+function renderGeneral(){
+  $('learnerEntryTitle').textContent=`${profile.name} Practice`;
+  $('homeLessonText').textContent=`${lessonLabel()} · ${lessonFactPairs().map(x=>`${x.f} × ${x.n}`).join(', ')}`;
+}
+function renderLearner(){
+  $('learnerWelcome').textContent=`Welcome back, ${profile.name}!`;
+  const fs=selectedFactors(lesson.selections); $('missionName').textContent=lessonLabel();
+  $('missionFacts').innerHTML=lessonFactPairs().map(x=>`<span class="pill">${x.f} × ${x.n}</span>`).join('');
+  const single=fs.length===1, f=fs[0]; const full=single&&[3,4,5,6,7,8,9].includes(f);
+  $('discoverCaption').textContent=full?'Learn patterns and discover different ways to think.':single?'Teaching module coming soon — practice is ready.':'Review the learning strategies for today’s selected tables.';
+  $('challengeCaption').textContent=full?'Use what you have learned in a real-life maths problem.':single?'Challenge module coming soon — practice is ready.':'Use today’s selected tables in mixed real-life maths problems.';
+  $('discoverBtn').style.display=settings.showActivities?'block':'none';
+  $('challengeBtn').style.display=settings.showActivities?'block':'none';
+}
+function renderParent(){
+  $('parentSubtitle').textContent=`Planning and progress for ${profile.name}`;
+  $('dashboardLesson').innerHTML=`<strong>${lessonLabel()}</strong><br><span class="small">${lessonFactPairs().map(x=>`${x.f} × ${x.n}`).join(', ')}<br><strong>${lessonFactPairs().length} facts selected</strong> · ${lesson.questions} questions per Practice round</span>`;
+  $('journalTitle').textContent=`${profile.name}’s Learning Journal`;
+  $('learnerName').value=profile.name;$('yearLevel').value=profile.year;$('encouragement').value=profile.encouragement;
+  $('allowStrategies').checked=settings.allowStrategies;$('showActivities').checked=settings.showActivities;$('mixOrder').checked=settings.mixOrder;
+  renderSetup();renderStats();
+}
+function renderSetup(){
+  $('factorGrid').innerHTML='';
+  for(let f=2;f<=9;f++){const key=String(f),b=document.createElement('button');b.className='factor-btn'+(tempSelections[key]?' selected':'');b.textContent=`× ${f}`;b.addEventListener('click',()=>{if(tempSelections[key]){if(selectedFactors().length===1)return;delete tempSelections[key]}else tempSelections[key]=new Set();renderSetup()});$('factorGrid').appendChild(b)}
+  $('factGrid').innerHTML='';
+  selectedFactors().forEach(f=>{
+    const wrap=document.createElement('div');wrap.style.gridColumn='1 / -1';wrap.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px"><strong>× ${f} facts</strong><span><button type="button" class="nav" data-all="${f}">Select All</button> <button type="button" class="nav" data-clear="${f}">Clear All</button></span></div>`;$('factGrid').appendChild(wrap);
+    for(let n=1;n<=12;n++){const b=document.createElement('button');b.className='fact-btn'+(tempSelections[String(f)].has(n)?' selected':'');b.textContent=`${f} × ${n}`;b.addEventListener('click',()=>{const set=tempSelections[String(f)];set.has(n)?set.delete(n):set.add(n);renderSetup()});$('factGrid').appendChild(b)}
+  });
+  $('factGrid').querySelectorAll('[data-all]').forEach(b=>b.onclick=()=>{tempSelections[b.dataset.all]=new Set([1,2,3,4,5,6,7,8,9,10,11,12]);renderSetup()});
+  $('factGrid').querySelectorAll('[data-clear]').forEach(b=>b.onclick=()=>{tempSelections[b.dataset.clear]=new Set();renderSetup()});
+  $('questionCount').value=String(lesson.questions);
+}
+document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>openTab(tab.dataset.tab)));
+document.querySelectorAll('[data-open-tab]').forEach(b=>b.addEventListener('click',()=>openTab(b.dataset.openTab)));
+function openTab(name){document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===name));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===`panel-${name}`))}
+$('clearWholeLesson').addEventListener('click',()=>{tempSelections={};renderSetup();showConfirmation($('lessonSaveMessage'),'Lesson selections cleared. Choose the tables and facts for the new lesson.');});
+$('saveLesson').addEventListener('click',()=>{
+  const selections={};Object.entries(tempSelections).forEach(([f,set])=>{if(set.size)selections[f]=[...set].sort((a,b)=>a-b)});
+  if(!Object.keys(selections).length){showConfirmation($('lessonSaveMessage'),'Choose at least one fact.','try');return}
+  const fs=Object.keys(selections).map(Number).sort((a,b)=>a-b);lesson={factor:fs[0],facts:selections[String(fs[0])],selections,questions:Number($('questionCount').value)};write('mm_lesson',lesson);
+  // A newly saved lesson starts a fresh coverage cycle.
+  resetCoverage();
+  showConfirmation($('lessonSaveMessage'),`Lesson saved successfully for ${profile.name}.`);renderGeneral();renderLearner();renderParent()
+});
+$('saveProfile').addEventListener('click',()=>{
+  const name=$('learnerName').value.trim()||'Learner';profile={name,year:$('yearLevel').value,encouragement:$('encouragement').value};write('mm_profile',profile);
+  showConfirmation($('profileMessage'),'Learner profile updated successfully.');renderGeneral();renderLearner();renderParent()
+});
+['allowStrategies','showActivities','mixOrder'].forEach(id=>$(id).addEventListener('change',()=>{
+  settings={allowStrategies:$('allowStrategies').checked,showActivities:$('showActivities').checked,mixOrder:$('mixOrder').checked};
+  write('mm_settings',settings);
+  renderLearner();
+  showConfirmation($('settingsMessage'),'Settings updated successfully.');
+}));
+$('launchLearner').addEventListener('click',learnerHome);
+function shuffled(a){return [...a].sort(()=>Math.random()-.5)}
+let cards=[],index=0,correct=0,independent=0,strategyCount=0,cardStrategyCount=0,strategyIndex=0,answered=false,mistakes={},currentResult=null;
+function factKey(x){return `${x.f}x${x.n}`}
+function lessonCoverageSignature(){return JSON.stringify(lessonFactPairs().map(factKey).sort())}
+function freshCoverage(){return {signature:lessonCoverageSignature(),seen:[],cycle:{rounds:0,total:0,correct:0,independent:0,strategies:0}}}
+function readCoverage(){
+  const signature=lessonCoverageSignature();
+  const poolKeys=lessonFactPairs().map(factKey);
+  let c=read('mm_practice_coverage',null);
+  if(!c||c.signature!==signature)c=freshCoverage();
+  // Migrate the earlier remaining-based coverage format without losing progress.
+  if(!Array.isArray(c.seen)){
+    if(Array.isArray(c.remaining)){
+      const remaining=new Set(c.remaining);
+      c={signature,seen:poolKeys.filter(k=>!remaining.has(k)),cycle:{rounds:0,total:0,correct:0,independent:0,strategies:0}};
+    }else c=freshCoverage();
+  }
+  // Keep only facts that still belong to the current saved lesson.
+  const allowed=new Set(poolKeys);
+  c.seen=[...new Set(c.seen)].filter(k=>allowed.has(k));
+  if(!c.cycle)c.cycle={rounds:0,total:0,correct:0,independent:0,strategies:0};
+  return c;
+}
+function resetCoverage(){localStorage.removeItem('mm_practice_coverage')}
+function makeCards(){
+  const pool=lessonFactPairs();
+  if(!pool.length){cards=[];return false}
+  let coverage=readCoverage();
+  const seen=new Set(coverage.seen);
+  let remaining=pool.filter(x=>!seen.has(factKey(x)));
+  // Only begin a new pass after every selected fact has actually appeared.
+  if(!remaining.length){
+    coverage=freshCoverage();
+    write('mm_practice_coverage',coverage);
+    remaining=[...pool];
+  }
+  if(settings.mixOrder)remaining=shuffled(remaining);
+  // Questions per session is the round size. Unseen selected facts always come first.
+  cards=remaining.slice(0,Math.min(lesson.questions,remaining.length));
+  return cards.length>0;
+}
+function dotSet(items,crossed=false){let d='';for(let i=0;i<items;i++)d+='<span class="dot"></span>';return `<div class="set-card${crossed?' crossed':''}">${d}</div>`}
+function cluster(count,items,label,crossLast=false){let h='<div><div class="set-cluster">';for(let i=0;i<count;i++)h+=dotSet(items,crossLast&&i===count-1);h+=`</div><div class="cluster-label">${label}</div></div>`;return h}
+function partitionedDotSet(left,right){let a='',b='';for(let i=0;i<left;i++)a+='<span class="dot"></span>';for(let i=0;i<right;i++)b+='<span class="dot"></span>';return `<div class="partitioned-card"><div class="partition-part">${a}</div><div class="partition-divider"></div><div class="partition-part">${b}</div></div>`}
+function partitionedSetsVisual(itemsPerSet,count,left,right,answer,label='Visual: build each set'){let cards='';for(let i=0;i<count;i++)cards+=partitionedDotSet(left,right);return `<div class="visual-board"><div class="visual-title">${label}</div><div class="sets-row"><div><div class="set-cluster">${cards}</div><div class="cluster-label">${count} sets of ${itemsPerSet} — each set is ${left} + ${right}</div></div></div><div class="math-line big">(${left} × ${count}) + (${right} × ${count}) = ${answer}</div><div class="math-line">${left*count} + ${right*count} = ${answer}</div></div>`}
+function clockVisual(count=12){const vals=[5,10,15,20,25,30,35,40,45,50,55,60];let nums='';for(let i=0;i<12;i++){const angle=(i*30-60)*Math.PI/180;const x=50+39*Math.cos(angle),y=50+39*Math.sin(angle);nums+=`<span class="clock-number" style="left:${x}%;top:${y}%"><span class="clock-count">${i+1}</span><span class="clock-minute">${vals[i]} min</span></span>`}const lim=Math.max(1,Math.min(count,12));const shown=vals.slice(0,lim).map((v,i)=>`${i+1}×5=${v}`).join('   ');return `<div class="visual-board"><div class="visual-title">Clock visual — 12 sets of 5 minutes</div><div class="clock-wrap"><div class="clock-face">${nums}<div class="clock-center">12 sets<br>of 5</div></div></div><div class="clock-sequence">${shown}</div></div>`}
+function halveTenVisual(n){const total=10*n,answer=5*n;return `<div class="visual-board"><div class="visual-title">Another Way: half of the 10× fact</div><div class="math-line big">10 × ${n} = ${total}</div><div class="flow-visual"><span class="flow-step">${total}</span><span class="flow-arrow">÷ 2 →</span><span class="flow-step">${answer}</span></div><div class="math-line">5 × ${n} = ${answer}</div></div>`}
+function doubleDoubleVisual(n){return `<div class="visual-board"><div class="visual-title">Double, then double again</div><div class="flow-visual"><span class="flow-step">${n}</span><span class="flow-arrow">double →</span><span class="flow-step">${2*n}</span><span class="flow-arrow">double →</span><span class="flow-step">${4*n}</span></div><div class="math-line big">4 × ${n} = ${4*n}</div></div>`}
+function divisionVisual(total,itemsPerSet,count,prefix=''){return `<div class="visual-board"><div class="visual-title">Visual: make equal groups</div>${prefix}<div class="sets-row">${cluster(count,itemsPerSet,`${count} groups of ${itemsPerSet}`)}</div><div class="math-line big">${total} ÷ ${itemsPerSet} = ${count}</div></div>`}
+function flowVisual(steps){return `<div class="visual-board"><div class="visual-title">Visual: follow the steps</div><div class="flow-visual">${steps.map((s,i)=>`${i?'<span class="flow-arrow">→</span>':''}<span class="flow-step">${s}</span>`).join('')}</div></div>`}
+
+function splitVisual(itemsPerSet,left,right,answer){return `<div class="visual-board"><div class="visual-title">Visual: count the sets</div><div class="sets-row">${cluster(left,itemsPerSet,`${left} sets of ${itemsPerSet}`)}<div class="visual-plus">+</div>${cluster(right,itemsPerSet,`${right} sets of ${itemsPerSet}`)}</div><div class="math-line big">(${left} × ${itemsPerSet}) + (${right} × ${itemsPerSet}) = ${answer}</div><div class="math-line">${left*itemsPerSet} + ${right*itemsPerSet} = ${answer}</div></div>`}
+function clusterOnlyVisual(itemsPerSet,count,answer){return `<div class="visual-board"><div class="visual-title">Visual: count the sets</div><div class="sets-row">${cluster(count,itemsPerSet,`${count} sets of ${itemsPerSet}`)}</div><div class="math-line big">(${count} × ${itemsPerSet}) = ${answer}</div></div>`}
+function subtractItemsVisual(itemsPerSet,left,right,remove,answer){const total=(left+right)*itemsPerSet;return `<div class="visual-board"><div class="visual-title">Visual: count the sets</div><div class="sets-row">${cluster(left,itemsPerSet,`${left} sets of ${itemsPerSet}`)}<div class="visual-plus">+</div>${cluster(right,itemsPerSet,`${right} sets of ${itemsPerSet}`)}<div class="visual-minus">− ${remove}</div></div><div class="math-line big">(${left} × ${itemsPerSet}) + (${right} × ${itemsPerSet}) − ${remove} = ${total} − ${remove} = ${answer}</div><div class="math-line">${left*itemsPerSet} + ${right*itemsPerSet} − ${remove} = ${total} − ${remove} = ${answer}</div></div>`}
+function removalCluster(total,items,remove){let h='<div><div class="set-cluster">';for(let i=0;i<total;i++)h+=dotSet(items,i>=total-remove);h+=`</div><div class="cluster-label">${total} groups of ${items} — ${remove} group${remove===1?'':'s'} removed</div></div>`;return h}
+function minusVisual(itemsPerSet,total,remove,answer){const remain=total-remove;return `<div class="visual-board"><div class="visual-title">Visual: make ${total}, then remove</div><div class="sets-row">${removalCluster(total,itemsPerSet,remove)}</div><div class="notice"><strong>${total} groups of ${itemsPerSet} less ${remove} group${remove===1?'':'s'} of ${itemsPerSet} = ${remain} groups of ${itemsPerSet}</strong></div><div class="math-line big">(${total} × ${itemsPerSet}) − (${remove} × ${itemsPerSet}) = ${remain} × ${itemsPerSet} = ${answer}</div><div class="math-line">${total*itemsPerSet} − ${remove*itemsPerSet} = ${answer}</div></div>`}
+function sevenEightVisual(){
+  const ten=cluster(10,7,'10 groups of 7');
+  const two=cluster(2,7,'2 groups of 7');
+  const eight=cluster(8,7,'8 groups of 7');
+  return `<div class="visual-board"><div class="visual-title">Visual: make 10, then remove 2 groups</div><div class="sets-row">${ten}<div class="visual-minus">−</div>${two}</div><div class="notice"><strong>10 groups of 7 less 2 groups of 7 = 8 groups of 7</strong></div><div class="sets-row">${eight}</div><div class="math-line big">(10 × 7) − (2 × 7) = 8 × 7 = 56</div><div class="math-line">70 − 14 = 56</div></div>`
+}
+function secretNineVisual(n){const tens=n-1,ones=9-tens,answer=9*n;return `<div class="visual-board"><div class="visual-title">The Secret of Nine</div><div class="flow-visual"><span class="flow-step">one less than ${n} → ${tens}</span><span class="flow-arrow">and</span><span class="flow-step">${tens} + ${ones} = 9</span><span class="flow-arrow">→</span><span class="flow-step">${answer}</span></div><div class="math-line big">9 × ${n} = ${answer}</div></div>`}
+
+function nineRowsVisual(n){let rows='';for(let i=0;i<n;i++){rows+=`<div class="sets-row" style="margin:4px 0">${cluster(1,9,'',false)}<div class="set-card crossed" style="min-width:24px;grid-template-columns:8px"><span class="dot"></span></div></div>`}return `<div class="visual-board"><div class="visual-title">Visual: each set has 9 = 3 + 3 + 3</div>${rows}<div class="math-line big">(10 × ${n}) − ${n} = ${9*n}</div></div>`}
+function practiceVisual(f,n){const r=f*n;
+  if(n===1||n===2||n===10||n===11)return '';
+  if(f===3){if(n===3)return clusterOnlyVisual(3,3,9);if(n===5)return clockVisual(3);if(n===6)return flowVisual(['3 × 5 = 15','+ 3','18']);if(n===7)return flowVisual(['3 × 5 = 15','3 × 2 = 6','15 + 6 = 21']);if(n===9)return secretNineVisual(3);if(n===12)return flowVisual(['3 × 10 = 30','3 × 2 = 6','30 + 6 = 36']);return ''}
+  if(f===4){return `<div class="visual-board"><div class="visual-title">Use the 2× fact, then double it</div><div class="flow-visual"><span class="flow-step">2 × ${n} = ${2*n}</span><span class="flow-arrow">double →</span><span class="flow-step">${r}</span></div></div>`}
+  if(f===5){return clockVisual(n)}
+  if(f===6){if(n===12)return splitVisual(6,10,2,72,true);return splitVisual(n,5,1,r,false)}
+  if(f===7){if(n===4)return flowVisual(['2 × 7 = 14','double 14','28']);if(n===5)return clockVisual(7);if(n===6)return splitVisual(7,3,3,r);if(n===7)return splitVisual(7,5,2,r);if(n===8)return sevenEightVisual();if(n===9)return secretNineVisual(7);if(n===12)return splitVisual(7,10,2,84,true);return ''}
+  if(f===8){if(n===5)return halveTenVisual(8);if(n===6)return flowVisual(['4 × 6 = 24','double 24','48']);if(n===7)return sevenEightVisual();if(n===9)return minusVisual(8,10,1,r);if(n===12)return splitVisual(8,10,2,96,true);return ''}
+  if(f===9){if(n<10)return minusVisual(n,10,1,r);if(n===12)return flowVisual(['9 × 10 = 90','9 × 2 = 18','90 + 18 = 108']);return ''}
+  return ''}
+function discoverThree(){return `<div class="discover-grid"><div class="discover-card"><strong>3 × 5 = 15 — use the familiar 5× clock</strong>${clockVisual(3)}</div><div class="discover-card"><strong>3 × 6 = 18 — 6 groups of 3 = 5 groups + 1 group</strong>${splitVisual(3,5,1,18,true)}</div><div class="discover-card"><strong>3 × 7 = 21 — 7 groups of 3 = 5 groups + 2 groups</strong>${splitVisual(3,5,2,21,true)}</div><div class="discover-card"><strong>3 × 9 = 27 — use the 9 strategy</strong>${secretNineVisual(3)}</div><div class="discover-card"><strong>3 × 12 = 36 — 12 groups of 3 = 10 groups + 2 groups</strong>${splitVisual(3,10,2,36,true)}</div></div>`}
+function discoverFour(){return `<div class="discover-grid"><div class="discover-card"><strong>4 × 7 = 28 — double, then double again</strong>${doubleDoubleVisual(7)}</div><div class="discover-card"><strong>Another Way: use the 2× fact</strong><div class="math-line big">2 × 7 = 14</div><div class="math-line">Double 14 = 28</div></div></div>`}
+function discoverFive(){return `<div class="notice"><strong>A clock is 12 sets of 5 minutes.</strong><br>Each number around the clock adds another set of 5: 1 × 5 = 5, 2 × 5 = 10 … 12 × 5 = 60.</div>${clockVisual(12)}<div class="discover-grid"><div class="discover-card"><strong>Pattern to notice</strong><div class="math-line">Odd number of sets → answer ends in 5<br>Even number of sets → answer ends in 0</div></div><div class="discover-card"><strong>5 × 8 = 40 — half of 10×8</strong>${halveTenVisual(8)}</div></div>`}
+function discoverSix(){return `<div class="discover-grid"><div class="discover-card"><strong>Learn the idea once: 6 is 5 + 1</strong><div class="math-line big">5 × 7 = 35</div><div class="math-line">Add one more 7: 35 + 7 = 42</div></div><div class="discover-card"><strong>Another Way: double the 3× fact</strong><div class="math-line big">3 × 7 = 21</div><div class="math-line">Double 21: 21 + 21 = 42</div></div></div>`}
+function discoverSeven(){return `<div class="fact-memory"><span>42</span><span>49</span><span>56</span></div><div class="discover-grid"><div class="discover-card"><strong>7 × 6 = 42</strong>${splitVisual(7,3,3,42)}</div><div class="discover-card"><strong>7 × 7 = 49</strong>${splitVisual(7,5,2,49)}</div><div class="discover-card"><strong>7 × 8 = 56 — build from 10×</strong>${sevenEightVisual()}<div class="notice"><strong>Memory trick:</strong> 7, 8 … 5, 6. They are neighbours: 7 × 8 = 56.</div></div><div class="discover-card"><strong>7 × 9 = 63 — use the 9 strategy</strong>${secretNineVisual(7)}<div class="notice"><strong>Another Way to Think:</strong> 10 × 7 = 70; take away 1 × 7 = 7; 70 − 7 = 63.</div>${minusVisual(7,10,1,63)}</div></div>`}
+function discoverEight(){return `<div class="discover-grid"><div class="discover-card"><strong>8 × 5 = 40 — halve the 10× fact</strong>${halveTenVisual(8)}</div><div class="discover-card"><strong>8 × 6 = 48 — double the related 4× fact</strong>${flowVisual(['4 × 6 = 24','double 24','48'])}</div><div class="discover-card"><strong>8 × 7 = 56 — build from 10×</strong>${sevenEightVisual()}</div><div class="discover-card"><strong>8 × 12 = 96 — 12 groups of 8 = 10 groups + 2 groups</strong>${splitVisual(8,10,2,96,true)}</div></div>`}
+function discoverNine(){return `<div class="discover-grid"><div class="discover-card"><strong>9 × 6 = 54 — 10× minus one set</strong>${minusVisual(6,10,1,54)}</div><div class="discover-card"><strong>9 × 7 = 63 — Secret of Nine</strong><div class="math-line big">One less than 7 is 6; 6 + 3 = 9 → 63</div>${minusVisual(7,10,1,63)}</div><div class="discover-card"><strong>9 × 8 = 72 — 10× minus one set</strong>${minusVisual(8,10,1,72)}</div></div>`}
+function challengeVisual(f,i){
+  if(f===3){return [clusterOnlyVisual(3,4,12),flowVisual(['3 × 5 = 15','3 × 2 = 6','15 + 6 = 21']),flowVisual(['3 × 8 = 24','+ 2','26'])][i]||''}
+  if(f===4){return [partitionedSetsVisual(4,3,2,2,12),partitionedSetsVisual(4,7,2,2,28),flowVisual(['8 sets of 4 = 32','+ 2','34']),divisionVisual(12,4,3),divisionVisual(28,4,7),flowVisual(['34','− 2 = 32','32 ÷ 8 = 4'])][i]||''}
+  if(f===5){return [clockVisual(4),clockVisual(7),flowVisual(['8 sets of 5 = 40','+ 6','46']),divisionVisual(20,5,4),divisionVisual(35,5,7),flowVisual(['46','− 6 = 40','40 ÷ 8 = 5'])][i]||''}
+  if(f===6){return [partitionedSetsVisual(6,4,5,1,24),partitionedSetsVisual(6,7,5,1,42),flowVisual(['8 sets of 6 = 48','+ 3','51']),divisionVisual(24,6,4),divisionVisual(42,6,7),flowVisual(['51','− 3 = 48','48 ÷ 8 = 6'])][i]||''}
+  if(f===7){return [splitVisual(7,3,3,42),splitVisual(7,5,2,49),flowVisual(['8 groups of 7 = 56','− 2 absent players','54 players present'])][i]||''}
+  if(f===8){return [sevenEightVisual(),flowVisual(['4 × 6 = 24','double 24','48']),subtractItemsVisual(8,5,2,3,53)][i]||''}
+  if(f===9){return [minusVisual(6,10,1,54),minusVisual(8,10,1,72),flowVisual(['9 × 7 = 63','+ 5 donated books','68 books'])][i]||''}return ''}
+function strategyLibrary(f,n){
+  const r=f*n,ways=[];
+  if(n===10){ways.push({title:'10× shortcut',text:`${f} × 10 = ${r}.`});return ways}
+  if(n===11){ways.push({title:'11× shortcut — repeat the factor',text:`${f} × 11 = ${r}. For a single-digit factor, ×11 repeats the digit.`});return ways}
+  if(f===3){
+    if(n===1){ways.push({title:'Known fact',text:'One group of 3 is 3.'});return ways}
+    if(n===2){ways.push({title:'Primary Strategy — double 3',text:'3 + 3 = 6.'});return ways}
+    if(n===3){ways.push({title:'Primary Strategy — three 3s',text:'3 + 3 + 3 = 9.'});return ways}
+    if(n===4){ways.push({title:'Primary Strategy — double, then double again',text:'Double 3 to get 6. Double 6 to get 12.'});return ways}
+    if(n===5){ways.push({title:'Primary Strategy — use the familiar 5× clock',text:'Turn it around: 5 × 3 = 15. On the clock, 3 sets of 5 minutes = 15 minutes.'});return ways}
+    if(n===6){ways.push({title:'Primary Strategy — use 3×5 and add one more 3',text:'3 × 5 = 15. Add 3: 15 + 3 = 18.'});ways.push({title:'Another Way to Think — double 3×3',text:'3 × 3 = 9. Double 9 = 18.'});return ways}
+    if(n===7){ways.push({title:'Primary Strategy — build 7 groups of 3',text:'3 × 7 = 7 × 3 = 7 groups of 3. Split it into 5 groups of 3 + 2 groups of 3: (5 × 3) + (2 × 3) = 15 + 6 = 21.'});return ways}
+    if(n===8){ways.push({title:'Primary Strategy — double the 3×4 fact',text:'3 × 4 = 12. Double 12 = 24.'});ways.push({title:'Another Way to Think — 10× minus 2×',text:'3 × 10 = 30. 3 × 2 = 6. 30 − 6 = 24.'});return ways}
+    if(n===9){ways.push({title:'Primary Strategy — use the 9 strategy',text:'Turn it around: 9 × 3 = 27. One less than 3 is 2, and 2 + 7 = 9.',visual:secretNineVisual(3)});ways.push({title:'Another Way to Think — 10× minus one 3',text:'3 × 10 = 30. Take away 3: 30 − 3 = 27.'});return ways}
+    if(n===12){ways.push({title:'Primary Strategy — build 12 groups of 3',text:'12 groups of 3 = 10 groups of 3 + 2 groups of 3. (10 × 3) + (2 × 3) = 30 + 6 = 36.'});ways.push({title:'Another Way to Think — double 3×6',text:'3 × 6 = 18. Double 18 = 36.'});return ways}
+    ways.push({title:'Known 3× fact',text:`3 × ${n} = ${r}.`});return ways
+  }
+  if(f===4){
+    ways.push({title:'Primary Strategy — double, then double again',text:`Double ${n} to get ${2*n}, then double ${2*n} to get ${r}.`});
+    ways.push({title:'Another Way to Think — two 2× facts',text:`(2 × ${n}) + (2 × ${n}) = ${2*n} + ${2*n} = ${r}.`});
+    return ways;
+  }
+  if(f===5){
+    ways.push({title:'Primary Strategy — count in fives',text:`Count ${n} sets of 5: ${Array.from({length:n},(_,i)=>(i+1)*5).join(', ')}. The answer is ${r}.`});
+    ways.push({title:'Another Way to Think — half of 10×',text:`10 × ${n} = ${10*n}. Half of ${10*n} is ${r}, so 5 × ${n} = ${r}.`});
+    return ways;
+  }
+  if(f===6){
+    if(n===10){ways.push({title:'10× shortcut',text:'6 × 10 = 60.'});return ways}
+    if(n===11){ways.push({title:'11× shortcut — repeat the factor',text:'6 × 11 = 66. For a single-digit factor, ×11 repeats the digit.'});return ways}
+    if(n===12){ways.push({title:'Primary Strategy — build 12 groups of 6',text:'12 groups of 6 = 10 groups of 6 + 2 groups of 6. (10 × 6) + (2 × 6) = 60 + 12 = 72.'});return ways}
+    ways.push({title:'Primary Strategy — build 6 groups',text:`6 groups of ${n} = 5 groups of ${n} + 1 group of ${n}. (5 × ${n}) + (1 × ${n}) = ${5*n} + ${n} = ${r}.`});
+    ways.push({title:'Another Way to Think — double the 3× fact',text:`3 × ${n} = ${3*n}. Double ${3*n}: ${3*n} + ${3*n} = ${r}.`});
+    return ways;
+  }
+  if(f===7){
+    if(n===4){ways.push({title:'Primary Strategy — double the 2× fact',text:'2 × 7 = 14. Double 14 = 28.'});return ways}
+    if(n===5){ways.push({title:'Primary Strategy — use the 5× fact',text:'5 × 7 = 35. Use the familiar 5× pattern or clock.'});return ways}
+    if(n===8){ways.push({title:'Primary Strategy — build from 10×',text:'10 × 7 = 70. 2 × 7 = 14. 70 − 14 = 56.'});ways.push({title:'Memory trick — neighbours',text:'7 × 8 = 56. Think 7, 8 … 5, 6 — both pairs are neighbours.'});return ways}
+    if(n===9){ways.push({title:'Primary Strategy — use the 9 strategy',text:'Turn it around: 9 × 7 = 63. One less than 7 is 6, and 6 + 3 = 9.',visual:secretNineVisual(7)});ways.push({title:'Another Way to Think — 10× minus 1×',text:'10 × 7 = 70. Take away 1 × 7 = 7. 70 − 7 = 63.',visual:minusVisual(7,10,1,63)});return ways}
+    if(n===12){ways.push({title:'Primary Strategy — build 12 groups of 7',text:'12 groups of 7 = 10 groups of 7 + 2 groups of 7. (10 × 7) + (2 × 7) = 70 + 14 = 84.'});return ways}
+    if(n===6){ways.push({title:'Primary Strategy — double a known fact',text:'3 × 7 = 21. Double 21 = 42.'});ways.push({title:'Memory number',text:'Remember 42, 49, 56 for 7×6, 7×7, 7×8.'});return ways}
+    if(n===7){ways.push({title:'Primary Strategy — build 7 groups of 7',text:'7 groups of 7 = 5 groups of 7 + 2 groups of 7. (5 × 7) + (2 × 7) = 35 + 14 = 49.'});ways.push({title:'Memory number',text:'Remember 42, 49, 56 for 7×6, 7×7, 7×8.'});return ways}
+    ways.push({title:'Known fact',text:`Use the easiest fact you already know: ${f} × ${n} = ${r}.`});return ways
+  }
+  if(f===8){
+    if(n===5){ways.push({title:'Primary Strategy — halve the 10× fact',text:'10 × 8 = 80. Half of 80 is 40, so 8 × 5 = 40.'});ways.push({title:'Another Way — use the 5× clock',text:'Count 8 jumps of 5 around the clock: 5, 10, 15, 20, 25, 30, 35, 40.'});return ways}
+    if(n===6){ways.push({title:'Primary Strategy — double the 4× fact',text:'4 × 6 = 24. Double 24 = 48.'});return ways}
+    if(n===7){ways.push({title:'Primary Strategy — build from 10×',text:'10 × 7 = 70. 2 × 7 = 14. 70 − 14 = 56.'});ways.push({title:'Memory trick — neighbours',text:'7 × 8 = 56. Think 7, 8 … 5, 6.'});return ways}
+    if(n===9){ways.push({title:'Primary Strategy — use the 9× pattern',text:'9 × 8 = 72: one less than 8 is 7, and 7 + 2 = 9.'});return ways}
+    if(n===12){ways.push({title:'Primary Strategy — build 12 groups of 8',text:'12 groups of 8 = 10 groups of 8 + 2 groups of 8. (10 × 8) + (2 × 8) = 80 + 16 = 96.'});return ways}
+    if(n%2===0){ways.push({title:'Primary Strategy — double the 4× fact',text:`4 × ${n} = ${4*n}. Double ${4*n} = ${r}.`});return ways}
+    ways.push({title:'Known anchor',text:`Use the shortest known fact to reach 8 × ${n} = ${r}.`});return ways
+  }
+  if(f===9){
+    if(n<10){ways.push({title:'Primary Strategy — the Secret of Nine',text:`One less than ${n} is ${n-1}. The other digit makes 9, so 9 × ${n} = ${r}.`});ways.push({title:'Another Way — 10× minus one set',text:`10 × ${n} = ${10*n}. Take away 1 × ${n} = ${n}. ${10*n} − ${n} = ${r}.`});return ways}
+    if(n===12){ways.push({title:'Primary Strategy — build 12 groups of 9',text:'12 groups of 9 = 10 groups of 9 + 2 groups of 9. (10 × 9) + (2 × 9) = 90 + 18 = 108.'});return ways}
+    ways.push({title:'Primary Strategy — build from 10×9',text:`Use 10 × 9 = 90 and adjust to ${r}.`});return ways
+  }
+  ways.push({title:'Groups',text:`Think of ${n} groups of ${f}.`});
+  if(n>=2)ways.push({title:'Build from a known fact',text:`Use ${f} × ${n-1} and add one more ${f}.`});
+  ways.push({title:'Turn it around',text:`${f} × ${n} is the same as ${n} × ${f}.`});
+  return ways;
+}
+function startPractice(){
+  if(!makeCards())return;
+  index=0;correct=0;independent=0;strategyCount=0;mistakes={};loadCard();show('practice')
+}
+function loadCard(){answered=false;cardStrategyCount=0;strategyIndex=0;currentResult=null;const {f,n}=cards[index];$('equation').textContent=`${f} × ${n} = ?`;$('answer').value='';$('answer').disabled=false;$('checkBtn').disabled=false;$('thinkBtn').disabled=true;$('thinkBtn').textContent='🧠 Another Way to Think';$('feedback').className='feedback';$('feedback').textContent='Type your answer, then check it.';$('nextBtn').classList.add('hidden');$('practiceProgress').textContent=`Question ${index+1} of ${cards.length}`;setTimeout(()=>$('answer').focus(),80)}
+$('practiceStart').addEventListener('click',startPractice);$('practiceAgain').addEventListener('click',startPractice);
+$('thinkBtn').addEventListener('click',()=>{
+  if(!answered)return;
+  const {f,n}=cards[index],ways=strategyLibrary(f,n);
+  if(strategyIndex>=ways.length){$('feedback').className='feedback try';$('feedback').innerHTML=`<strong>Answer reveal</strong><br>${f} × ${n} = ${f*n}`;$('thinkBtn').disabled=true;return}
+  const w=ways[strategyIndex++];cardStrategyCount++;strategyCount++;if(currentResult)currentResult.strategies=cardStrategyCount;$('feedback').className='feedback try';$('feedback').innerHTML=`<strong>${w.title}</strong><br>${w.text}${w.visual||practiceVisual(f,n)}`;$('thinkBtn').textContent=strategyIndex<ways.length?'🧠 Another Way to Think':'Reveal Answer'
+});
+function checkAnswer(){
+  if(answered)return;if($('answer').value.trim()===''){$('feedback').className='feedback try';$('feedback').textContent='Type an answer first.';return}
+  answered=true;$('answer').disabled=true;$('checkBtn').disabled=true;
+  const {f,n}=cards[index],expected=f*n,actual=Number($('answer').value);
+  const firstCorrect=actual===expected;
+  currentResult={f,n,correctFirst:firstCorrect,independent:firstCorrect&&cardStrategyCount===0,strategies:cardStrategyCount,committed:false};
+  if(firstCorrect){correct++;if(cardStrategyCount===0)independent++;$('feedback').className='feedback success';$('feedback').textContent=cardStrategyCount===0?'Exactly right — independent recall!':'Exactly right — good reasoning!'}
+  else{const key=`${f} × ${n}`;mistakes[key]=(mistakes[key]||0)+1;$('feedback').className='feedback try';$('feedback').innerHTML=`The answer is ${expected}.<br>Say it aloud: ${f} times ${n} is ${expected}.`}
+  $('thinkBtn').disabled=!settings.allowStrategies;$('nextBtn').textContent=index===cards.length-1?'Finish':'Next Question';$('nextBtn').classList.remove('hidden')
+}
+$('checkBtn').addEventListener('click',checkAnswer);$('answer').addEventListener('keydown',e=>{if(e.key==='Enter')checkAnswer()});
+function commitCurrentResult(){
+  if(!currentResult||currentResult.committed)return;
+  const key=`${currentResult.f} × ${currentResult.n}`;
+  const rec=stats.facts[key]||{attempts:0,firstCorrect:0,firstWrong:0,independent:0,strategies:0,recent:[]};
+  rec.attempts++;
+  if(currentResult.correctFirst)rec.firstCorrect++;else rec.firstWrong++;
+  if(currentResult.independent)rec.independent++;
+  rec.strategies+=currentResult.strategies||0;
+  rec.recent.unshift({date:new Date().toLocaleDateString('en-AU'),correct:!!currentResult.correctFirst,independent:!!currentResult.independent,strategies:currentResult.strategies||0});
+  rec.recent=rec.recent.slice(0,6);
+  stats.facts[key]=rec;
+  currentResult.committed=true;
+  write('mm_stats',stats);
+}
+$('nextBtn').addEventListener('click',()=>{commitCurrentResult();if(index<cards.length-1){index++;loadCard()}else finishPractice()});
+function finishPractice(){
+  Object.entries(mistakes).forEach(([k,v])=>stats.weak[k]=(stats.weak[k]||0)+v);
+  stats.sessions.unshift({date:new Date().toLocaleDateString('en-AU'),factor:selectedFactors(lesson.selections).join(','),correct,total:cards.length,independent,strategies:strategyCount});
+  stats.sessions=stats.sessions.slice(0,50);write('mm_stats',stats);
+  // Coverage is based only on facts that were actually presented in completed rounds.
+  let coverage=readCoverage();
+  const selectedKeys=lessonFactPairs().map(factKey);
+  const selectedSet=new Set(selectedKeys);
+  const seen=new Set(coverage.seen.filter(k=>selectedSet.has(k)));
+  cards.forEach(c=>seen.add(factKey(c)));
+  const cycle=coverage.cycle||{rounds:0,total:0,correct:0,independent:0,strategies:0};
+  cycle.rounds++;cycle.total+=cards.length;cycle.correct+=correct;cycle.independent+=independent;cycle.strategies+=strategyCount;
+  coverage={signature:lessonCoverageSignature(),seen:[...seen],cycle};
+  write('mm_practice_coverage',coverage);
+  const left=Math.max(0,selectedKeys.length-seen.size);
+  $('practiceAgain').textContent=left?`Continue Practice (${left} facts left)`:'Practise These Facts Again';
+  $('completeTitle').textContent=profile.encouragement;
+  if(left){
+    $('completeText').textContent=`${profile.name}, in this round you answered ${correct} out of ${cards.length} correctly and ${independent} independently. You have now practised ${seen.size} of ${selectedKeys.length} selected facts. ${left} fact${left===1?'':'s'} still ${left===1?'needs':'need'} to be practised.`;
+  }else{
+    const lessonSummary=`${profile.name}, you have now practised all ${selectedKeys.length} facts selected for today's lesson. Across the full lesson: ${cycle.correct} of ${cycle.total} were correct on the first attempt, ${cycle.independent} were answered independently, and ${cycle.strategies} ways of thinking were explored.`;
+    const roundSummary=cycle.rounds>1?` In this final round: ${correct} out of ${cards.length} correct.`:'';
+    $('completeText').textContent=lessonSummary+roundSummary;
+  }
+  show('complete')
+}
+function renderStats(){
+  const ss=stats.sessions||[],total=ss.reduce((a,s)=>a+s.total,0),good=ss.reduce((a,s)=>a+s.correct,0),ind=ss.reduce((a,s)=>a+s.independent,0),str=ss.reduce((a,s)=>a+s.strategies,0);
+  $('statSessions').textContent=ss.length;$('statAccuracy').textContent=total?Math.round(good/total*100)+'%':'—';$('statIndependent').textContent=total?Math.round(ind/total*100)+'%':'—';$('statStrategies').textContent=str;
+  const factEntries=Object.entries(stats.facts||{}).map(([key,r])=>{
+    const recent=r.recent||[];const recentWrong=recent.filter(x=>!x.correct).length;const last3=recent.slice(0,3);
+    let status='Developing';
+    if(r.attempts>=3&&last3.length===3&&last3.every(x=>x.correct&&x.independent))status='Secure';
+    else if(r.firstWrong>=2||recentWrong>=2)status='Needs practice';
+    const priority=(status==='Needs practice'?100:status==='Developing'?20:0)+r.firstWrong*5+recentWrong*3;
+    return {key,r,status,priority,recent};
+  }).sort((a,b)=>b.priority-a.priority||a.key.localeCompare(b.key));
+  const needs=factEntries.filter(x=>x.status==='Needs practice').slice(0,6);
+  $('weakFacts').textContent=needs.length?needs.map(x=>`${x.key} (${x.r.firstWrong} first-try error${x.r.firstWrong===1?'':'s'})`).join(' • '):'No recurring difficult facts recorded yet.';
+  $('factProgressBody').innerHTML=factEntries.length?factEntries.map(({key,r,status,recent})=>{
+    const firstRate=r.attempts?Math.round(r.firstCorrect/r.attempts*100):0;const indRate=r.attempts?Math.round(r.independent/r.attempts*100):0;
+    const recentMarks=recent.slice(0,5).map(x=>x.correct?(x.independent?'✓':'✓*'):'✗').join(' ');
+    return `<tr><td><strong>${key}</strong></td><td>${r.attempts}</td><td>${firstRate}%</td><td>${indRate}%</td><td>${recentMarks||'—'}</td><td>${status}</td></tr>`;
+  }).join(''):'<tr><td colspan="6">No fact-level practice recorded yet.</td></tr>';
+  $('historyBody').innerHTML=ss.length?ss.map(s=>`<tr><td>${s.date}</td><td>× ${s.factor}</td><td>${s.correct}/${s.total}</td><td>${s.independent}/${s.total}</td><td>${s.strategies}</td></tr>`).join(''):'<tr><td colspan="5">No completed sessions yet.</td></tr>'
+}
+$('discoverBtn').addEventListener('click',()=>{
+  const fs=selectedFactors(lesson.selections);
+  if(fs.length>1){
+    $('learnIcon').textContent='🧠';$('learnTitle').textContent='Discover Today’s Mixed Tables';$('learnSub').textContent='Review the shortest useful strategy for each selected table.';
+    const summaries={3:'<strong>×3:</strong> use the shortest known anchor — double, the 5× clock, the 9 strategy, or 10× ± a small adjustment.',4:'<strong>×4:</strong> use the 2× fact, then double it.',5:'<strong>×5:</strong> count in fives and use the 12 sets of 5 clock pattern.',6:'<strong>×6:</strong> use the shortest known anchor — often 5× plus one more; use ×10, ×11 and ×12 shortcuts where easier.',7:'<strong>×7:</strong> use known anchors and remember 42, 49 and 56.',8:'<strong>×8:</strong> double a useful 4× fact or use a known anchor.',9:'<strong>×9:</strong> use the 9 pattern or 10× minus one group.'};
+    $('learnBody').innerHTML=fs.map(f=>`<div class="mixed-learn-item">${summaries[f]||`<strong>×${f}:</strong> use the shortest known route.`}</div>`).join('');
+    show('learn'); return;
+  }
+  const f=primaryFactor();
+  if(f===3){
+    $('learnIcon').textContent='3️⃣';$('learnTitle').textContent='Discover the Threes';$('learnSub').textContent='Use the shortest familiar route to each 3× fact.';
+    $('learnBody').innerHTML='<strong>Primary strategy:</strong> use facts Maya already knows — doubling, the 5× clock, the 9 strategy, and 10× anchors.<br><strong>Another Way to Think:</strong> show a second route only when it is genuinely simpler or useful.'+discoverThree();
+  }else if(f===4){
+    $('learnIcon').textContent='4️⃣';$('learnTitle').textContent='Discover the Fours';$('learnSub').textContent='Use your 2× facts: double, then double again.';
+    $('learnBody').innerHTML='<strong>Primary strategy:</strong> double the number, then double the answer again.<br><strong>Another Way to Think:</strong> use the 2× fact, then double it.'+discoverFour();
+  }else if(f===5){
+    $('learnIcon').textContent='🕔';$('learnTitle').textContent='Discover the Fives';$('learnSub').textContent='Use the clock pattern and count confidently in fives.';
+    $('learnBody').innerHTML='<strong>Primary strategy:</strong> count in 5s. The answers alternate between ending in 5 and 0.<br><strong>Clock visual:</strong> a clock is 12 sets of 5 minutes. Move around the clock in jumps of 5.<br><strong>Another Way to Think:</strong> a 5× fact is half of the matching 10× fact.'+discoverFive();
+  }else if(f===6){
+    $('learnIcon').textContent='6️⃣';$('learnTitle').textContent='Discover the Sixes';$('learnSub').textContent='Build a set of 6 from a familiar set of 5 plus 1.';
+    $('learnBody').innerHTML='<strong>Primary strategy:</strong> use 5× + 1×.<br><strong>Another Way to Think:</strong> double the matching 3× fact.'+discoverSix();
+  }else if(f===7){
+    $('learnIcon').textContent='7️⃣';$('learnTitle').textContent='Discover the Sevens';$('learnSub').textContent='Use known anchors, then remember the three tricky facts.';
+    $('learnBody').innerHTML='<strong>Primary strategy:</strong> use the shortest known anchor. For difficult facts, the visual must show exactly that route.<br><br><strong>Facts to remember:</strong>'+discoverSeven()+'<br><strong>Another Way to Think:</strong> use 10× and add or remove only the groups needed.';
+  }else if(f===8){
+    $('learnIcon').textContent='🐙';$('learnTitle').textContent='Discover the Eights';$('learnSub').textContent='Build the eights from facts you already know.';
+    $('learnBody').innerHTML='<strong>Primary strategy:</strong> use the shortest known anchor — 5×, 9×, 10× or doubling — whichever is easiest.<br><strong>Another Way to Think:</strong> use a second familiar route only when it makes the fact easier.'+discoverEight()+'<br><strong>Useful anchors:</strong> use the known 5× and 9× facts where they give the shortest route.';
+  }else if(f===9){
+    $('learnIcon').textContent='✨';$('learnTitle').textContent='The Secret of Nine';$('learnSub').textContent='Watch the tens digit rise while the ones digit falls.';
+    $('learnBody').innerHTML='<strong>Primary strategy:</strong> use the Secret of Nine: the tens digit is one less than n and the two answer digits add to 9.<br><strong>Another Way to Think:</strong> use 10×n, then remove one group of n.'+discoverNine();
+  }else{$('learnIcon').textContent='🚧';$('learnTitle').textContent=`The ${f}s learning module is coming soon`;$('learnSub').textContent='Flash-card practice is ready now.';$('learnBody').textContent='We are developing special visual strategies and activities for this factor.'}
+  show('learn')
+});
+$('learnPractice').addEventListener('click',startPractice);
+const challengeBank={
+  3:[
+    {level:'Guided Practice',title:'Three Apples in Each Bag',q:'There are 4 bags with 3 apples in each bag. How many apples are there altogether?',a:12,work:'There are 4 groups of 3. 3 × 4 = 12.'},
+    {level:'Apply Your Thinking',title:'Books on Shelves',q:'Seven shelves each hold 3 books. How many books are there altogether?',a:21,work:'Use the 3×5 and 3×2 anchors: 15 + 6 = 21.'},
+    {level:'Challenge Yourself',title:'Pencils and Two Extras',q:'Eight boxes each contain 3 pencils. Two extra pencils are added. How many pencils are there altogether?',a:26,work:'First 3 × 8 = 24. Then add 2: 24 + 2 = 26.'}
+  ],
+  4:[
+    {level:'Guided Practice',title:'Car Wheels',q:'There are 3 cars. Each car has 4 wheels. How many wheels altogether?',a:12,work:'There are 3 sets of 4. Split each set as 2 + 2: (2 × 3) + (2 × 3) = 6 + 6 = 12.'},
+    {level:'Apply Your Thinking',title:'Tables and Chairs',q:'Seven small tables each have 4 chairs. How many chairs are there altogether?',a:28,work:'There are 7 sets of 4. Use two 2× facts: (2 × 7) + (2 × 7) = 14 + 14 = 28.'},
+    {level:'Challenge Yourself',title:'Cars and Spare Wheels',q:'Eight cars are parked outside. Each car has 4 wheels. Two spare wheels are also in the garage. How many wheels are there altogether?',a:34,work:'First find 8 × 4 = 32. Then add the 2 spare wheels: 32 + 2 = 34.'},
+    {level:'Guided Practice · Division',title:'Wheels into Cars',q:'12 wheels are used for cars with 4 wheels each. How many cars can have all four wheels?',a:3,work:'12 ÷ 4 = 3. The 12 wheels make 3 equal groups of 4.'},
+    {level:'Apply Your Thinking · Division',title:'Chairs at Tables',q:'28 chairs are arranged with 4 chairs at each table. How many tables are needed?',a:7,work:'28 ÷ 4 = 7. Check with 4 × 7 = 28.'},
+    {level:'Challenge Yourself · Division',title:'Spare Wheels',q:'34 wheels are available. Two are spare and put aside. The remaining wheels are used for 8 cars. How many wheels does each car have?',a:4,work:'First 34 − 2 = 32. Then 32 ÷ 8 = 4.'}
+  ],
+  5:[
+    {level:'Guided Practice',title:'Five-Dollar Amounts',q:'Maya has 4 lots of $5. How much money does she have?',a:20,work:'Count four sets of 5: 5, 10, 15, 20. So 5 × 4 = 20.'},
+    {level:'Apply Your Thinking',title:'Fingers',q:'Seven hands have 5 fingers each. How many fingers altogether?',a:35,work:'There are 7 sets of 5. Count around in fives to 35.'},
+    {level:'Challenge Yourself',title:'Party Bags',q:'Eight party bags each contain 5 sweets. Maya adds another 6 sweets to the table. How many sweets are there altogether?',a:46,work:'First 8 × 5 = 40. Then add 6: 40 + 6 = 46.'},
+    {level:'Guided Practice · Division',title:'Five-Dollar Groups',q:'$20 is made up entirely of $5 amounts. How many $5 amounts are there?',a:4,work:'20 ÷ 5 = 4.'},
+    {level:'Apply Your Thinking · Division',title:'Pencil Groups',q:'35 pencils are placed equally into groups of 5. How many groups are there?',a:7,work:'35 ÷ 5 = 7.'},
+    {level:'Challenge Yourself · Division',title:'Party Bags Again',q:'46 sweets are on a table. Six are put aside. The remaining sweets are shared equally among 8 party bags. How many sweets go into each bag?',a:5,work:'First 46 − 6 = 40. Then 40 ÷ 8 = 5.'}
+  ],
+  6:[
+    {level:'Guided Practice',title:'Egg Cartons',q:'There are 4 cartons with 6 eggs in each carton. How many eggs are there altogether?',a:24,work:'There are 4 sets of 6. Build each set as 5 + 1: (5 × 4) + (1 × 4) = 20 + 4 = 24.'},
+    {level:'Apply Your Thinking',title:'Tennis Balls',q:'There are 7 tubes with 6 tennis balls in each tube. How many tennis balls are there altogether?',a:42,work:'There are 7 sets of 6. Use 5× + 1×: (5 × 7) + (1 × 7) = 35 + 7 = 42.'},
+    {level:'Challenge Yourself',title:'Party Tables',q:'Eight tables each have 6 chairs. Three extra chairs are then brought into the room. How many chairs are there altogether?',a:51,work:'First build 8 sets of 6: (5 × 8) + (1 × 8) = 40 + 8 = 48. Then add 3: 48 + 3 = 51.'},
+    {level:'Guided Practice · Division',title:'Egg Cartons',q:'24 eggs are placed equally into cartons holding 6 eggs each. How many cartons are needed?',a:4,work:'24 ÷ 6 = 4.'},
+    {level:'Apply Your Thinking · Division',title:'Tennis Ball Tubes',q:'42 tennis balls are packed into tubes holding 6 balls each. How many tubes are needed?',a:7,work:'42 ÷ 6 = 7. Check with 6 × 7 = 42.'},
+    {level:'Challenge Yourself · Division',title:'Party Chairs',q:'51 chairs are available. Three are put aside. The remaining chairs are arranged equally around 8 tables. How many chairs are placed at each table?',a:6,work:'First 51 − 3 = 48. Then 48 ÷ 8 = 6.'}
+  ],
+  7:[
+    {level:'Guided Practice',title:'Sticker Packs',q:'Six packs each contain 7 stickers. How many stickers are there altogether?',a:42,work:'There are 6 sets of 7. Split the sets as 3 + 3: 3 × 7 = 21 and 3 × 7 = 21. 21 + 21 = 42. Fact family: 7 × 6 = 42; 6 × 7 = 42; 42 ÷ 7 = 6; 42 ÷ 6 = 7.'},
+    {level:'Apply Your Thinking',title:'Library Shelves',q:'Seven shelves each hold 7 books. How many books are there?',a:49,work:'There are 7 sets of 7. Split the sets as 5 + 2: 5 × 7 = 35 and 2 × 7 = 14. 35 + 14 = 49. Fact family: 7 × 7 = 49; 49 ÷ 7 = 7.'},
+    {level:'Challenge Yourself',title:'Sports Teams',q:'Eight teams each have 7 players. Two players are absent. How many players are present?',a:54,work:'There are 8 sets of 7. Split the sets as 5 + 3: 5 × 7 = 35 and 3 × 7 = 21. 35 + 21 = 56. Then subtract the 2 absent players: 56 − 2 = 54.'}
+  ],
+  8:[
+    {level:'Guided Practice',title:'Octopus Arms',q:'Seven octopuses each have 8 arms. How many arms are there altogether?',a:56,work:'There are 7 sets of 8. Use the known 7 × 8 fact, or double 4 × 7: 4 × 7 = 28; double 28 = 56. Fact family: 8 × 7 = 56; 7 × 8 = 56; 56 ÷ 8 = 7; 56 ÷ 7 = 8.'},
+    {level:'Apply Your Thinking',title:'Pencil Boxes',q:'Six boxes each hold 8 pencils. How many pencils are there?',a:48,work:'There are 6 sets of 8. Split the 6 sets as 3 + 3: (3 × 8) + (3 × 8) = 24 + 24 = 48. Fact family: 8 × 6 = 48; 6 × 8 = 48; 48 ÷ 8 = 6; 48 ÷ 6 = 8.'},
+    {level:'Challenge Yourself',title:'Seats and Absences',q:'Seven rows each have 8 seats. Three seats are empty. How many seats are occupied?',a:53,work:'There are 7 sets of 8. Split the 7 sets as 5 + 2: (5 × 8) + (2 × 8) = 40 + 16 = 56. Then subtract 3 empty seats: 56 − 3 = 53.'}
+  ],
+  9:[
+    {level:'Guided Practice',title:'Cupcake Trays',q:'Six trays each hold 9 cupcakes. How many cupcakes are there altogether?',a:54,work:'See each tray as 10 cupcakes with one removed: (10 × 6) − 6 = 60 − 6 = 54. Fact family: 9 × 6 = 54; 6 × 9 = 54; 54 ÷ 9 = 6; 54 ÷ 6 = 9.'},
+    {level:'Apply Your Thinking',title:'Football Bibs',q:'Eight team bags each contain 9 training bibs. How many bibs are there?',a:72,work:'See each bag as 10 bibs with one removed: (10 × 8) − 8 = 80 − 8 = 72. Fact family: 9 × 8 = 72; 8 × 9 = 72; 72 ÷ 9 = 8; 72 ÷ 8 = 9.'},
+    {level:'Challenge Yourself',title:'Books and a Donation',q:'Nine shelves each hold 7 books. Then 5 extra books are donated. How many books are there now?',a:68,work:'First solve 9 × 7: (10 × 7) − 7 = 70 − 7 = 63. Then add the 5 donated books: 63 + 5 = 68.'}
+  ]
+};
+let challengeIndex=0;
+function challengeForFact(f,n,stage=0){
+  const contexts=[
+    ['packs','stickers'],['trays','cupcakes'],['boxes','pencils'],['bags','counters'],
+    ['shelves','books'],['rows','seats'],['teams','players'],['baskets','apples']
+  ];
+  const [groupsLabel,itemLabel]=contexts[(f*13+n*7)%contexts.length];
+  const groupLabel=groupsLabel.endsWith('s')?groupsLabel.slice(0,-1):groupsLabel;
+  const total=f*n;
+  if(stage===0){
+    return {
+      level:'Guided Practice',
+      title:`${n} groups of ${f}`,
+      q:`There are ${n} ${groupsLabel}. Each ${groupLabel} has ${f} ${itemLabel}. How many ${itemLabel} are there altogether?`,
+      a:total,
+      work:`There are ${n} groups of ${f}. ${n} × ${f} = ${total}. This is the same fact as ${f} × ${n} = ${total}.`,
+      _factor:f,_fact:n,_stage:0,_baseAnswer:total
+    };
+  }
+  if(stage===1){
+    return {
+      level:'Apply Your Thinking',
+      title:`Work out the multiplication`,
+      q:`A display has ${n} equal ${groupsLabel}, with ${f} ${itemLabel} in each. How many ${itemLabel} are in the display?`,
+      a:total,
+      work:`The important information is ${n} equal groups with ${f} in each group. That means ${n} × ${f} = ${total}.`,
+      _factor:f,_fact:n,_stage:1,_baseAnswer:total
+    };
+  }
+  const extra=((f+n)%4)+1;
+  return {
+    level:'Challenge Yourself',
+    title:`One more step`,
+    q:`There are ${n} ${groupsLabel} with ${f} ${itemLabel} in each. Then ${extra} extra ${itemLabel} are added. How many ${itemLabel} are there now?`,
+    a:total+extra,
+    work:`First solve the selected fact: ${n} groups of ${f} = ${n} × ${f} = ${total}. Then add the ${extra} extra: ${total} + ${extra} = ${total+extra}.`,
+    _factor:f,_fact:n,_stage:2,_baseAnswer:total,_extra:extra
+  };
+}
+function currentChallengeBank(){
+  const pairs=lessonFactPairs();
+  if(!pairs.length)return null;
+  const fs=selectedFactors(lesson.selections);
+  const isFullSingle=fs.length===1 && (lesson.selections[String(fs[0])]||[]).length===12;
+  if(isFullSingle) return (challengeBank[fs[0]]||[]).map(c=>({...c,_factor:fs[0]}));
+  // Targeted/mixed lessons retain the exact saved fact pool, while restoring the
+  // approved three-stage word-problem progression: Guided → Apply → Challenge.
+  const picks=[pairs[0],pairs[Math.floor((pairs.length-1)/2)],pairs[pairs.length-1]];
+  return picks.map((p,stage)=>challengeForFact(p.f,p.n,stage));
+}
+function loadChallenge(){
+  const bank=currentChallengeBank();
+  if(!bank){$('challengeLevel').textContent='Coming Soon';$('challengeTitle').textContent='Challenge Coming Soon';$('challengeQuestion').textContent=`The special ${primaryFactor()}s challenge is still being developed.`;$('challengeAnswer').classList.add('hidden');$('challengeCheck').classList.add('hidden');$('challengeNext').classList.add('hidden');return}
+  const c=bank[challengeIndex];$('challengeLevel').textContent=c.level;$('challengeTitle').textContent=c.title;$('challengeQuestion').textContent=c.q;$('challengeAnswer').classList.remove('hidden');$('challengeCheck').classList.remove('hidden');$('challengeAnswer').value='';$('challengeAnswer').disabled=false;$('challengeCheck').disabled=false;$('challengeNext').classList.add('hidden');$('challengeWorking').classList.add('hidden');$('challengeWorking').innerHTML='';$('challengeFeedback').className='feedback';$('challengeFeedback').textContent='Type your answer.';setTimeout(()=>$('challengeAnswer').focus(),80)
+}
+$('challengeBtn').addEventListener('click',()=>{challengeIndex=0;loadChallenge();show('challenge')});
+$('challengeCheck').addEventListener('click',()=>{
+  const bank=currentChallengeBank();if(!bank)return;const c=bank[challengeIndex];if($('challengeAnswer').value.trim()===''){$('challengeFeedback').className='feedback try';$('challengeFeedback').textContent='Type an answer first.';return}
+  const ok=Number($('challengeAnswer').value)===c.a;$('challengeAnswer').disabled=true;$('challengeCheck').disabled=true;$('challengeFeedback').className=ok?'feedback success':'feedback try';$('challengeFeedback').textContent=ok?'Exactly right! Here is how the answer was built.':`The answer is ${c.a}. Here is how it is worked out.`;$('challengeWorking').innerHTML=`<strong>How we worked it out</strong>${c._stage===2?`<div class="flow"><div class="step"><b>Selected fact</b><br>${c._fact} groups of ${c._factor} = ${c._baseAnswer}</div><div class="arrow">→</div><div class="step"><b>Add ${c._extra} extra</b><br>${c._baseAnswer} + ${c._extra} = ${c.a}</div></div>`:(c._fact!=null?practiceVisual(c._factor,c._fact):challengeVisual(c._factor||primaryFactor(),challengeIndex))}<br>${c.work}`;$('challengeWorking').classList.remove('hidden');
+  if(challengeIndex<bank.length-1){$('challengeNext').textContent='Next Challenge';$('challengeNext').classList.remove('hidden')}else{$('challengeNext').textContent='Finish';$('challengeNext').classList.remove('hidden')}
+});
+$('challengeNext').addEventListener('click',()=>{const bank=currentChallengeBank();if(bank&&challengeIndex<bank.length-1){challengeIndex++;loadChallenge()}else learnerHome()});
+const deleteHistoryConfirm=$('deleteHistoryConfirm');
+const deleteHistoryBtn=$('deleteHistory');
+deleteHistoryConfirm.addEventListener('input',()=>{
+  deleteHistoryBtn.disabled=deleteHistoryConfirm.value.trim()!=='DELETE';
+});
+deleteHistoryBtn.addEventListener('click',()=>{
+  if(deleteHistoryConfirm.value.trim()!=='DELETE')return;
+  stats={sessions:[],weak:{},facts:{}};
+  write('mm_stats',stats);
+  deleteHistoryConfirm.value='';
+  deleteHistoryBtn.disabled=true;
+  showConfirmation($('resetMessage'),'Maya’s learning history has been permanently deleted from this device.');
+  renderStats();
+});
+const direct=new URLSearchParams(location.search).get('mode');renderGeneral();renderLearner();if(direct==='learner')show('learnerHome');
+</script>
+</body>
+</html>
