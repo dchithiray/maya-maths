@@ -274,7 +274,18 @@ const pageMode = new URLSearchParams(location.search).get('mode');
 const learnerMode = pageMode==='learner';
 const previewMode = pageMode==='preview';
 const cloudMode = (learnerMode||previewMode)&&new URLSearchParams(location.search).get('cloud')==='1';
-function learnerHome(){show('learnerHome')}
+function learnerHome(){
+  if($('practice').classList.contains('active')&&cards.length){
+    if(answered&&currentResult){
+      commitCurrentResult();
+      if(index<cards.length-1)index++;
+      else{practicePaused=false;finishPractice();return}
+    }
+    practicePaused=true;
+    $('practiceStart').querySelector('.mt').textContent='Continue Practice';
+  }
+  show('learnerHome')
+}
 function generalHome(){show('generalHome')}
 function goHome(){ learnerMode ? learnerHome() : generalHome(); }
 document.querySelectorAll('[data-general-home]').forEach(b=>b.addEventListener('click',goHome));
@@ -343,7 +354,7 @@ $('saveProfile').addEventListener('click',()=>{
 }));
 $('launchLearner').addEventListener('click',learnerHome);
 function shuffled(a){return [...a].sort(()=>Math.random()-.5)}
-let cards=[],index=0,correct=0,independent=0,strategyCount=0,cardStrategyCount=0,strategyIndex=0,answered=false,mistakes={},currentResult=null,practiceMode='independent';
+let cards=[],index=0,correct=0,independent=0,strategyCount=0,cardStrategyCount=0,strategyIndex=0,answered=false,mistakes={},currentResult=null,practiceMode='independent',practicePaused=false;
 function factKey(x){return `${x.f}x${x.n}`}
 function lessonCoverageSignature(){return JSON.stringify(lessonFactPairs().map(factKey).sort())}
 function freshCoverage(){return {signature:lessonCoverageSignature(),seen:[],cycle:{rounds:0,total:0,correct:0,independent:0,strategies:0}}}
@@ -506,10 +517,10 @@ function makeSupportedCards(){
 function startPractice(mode='independent'){
   practiceMode=mode;
   if(!(practiceMode==='supported'?makeSupportedCards():makeCards()))return;
-  index=0;correct=0;independent=0;strategyCount=0;mistakes={};loadCard();show('practice')
+  practicePaused=false;$('practiceStart').querySelector('.mt').textContent='Start Practice';index=0;correct=0;independent=0;strategyCount=0;mistakes={};loadCard();show('practice')
 }
 function loadCard(){answered=false;cardStrategyCount=0;strategyIndex=0;currentResult=null;const {f,n}=cards[index];$('equation').textContent=`${f} × ${n} = ?`;$('answer').value='';$('answer').disabled=false;$('checkBtn').disabled=false;$('thinkBtn').disabled=practiceMode!=='supported';$('thinkBtn').textContent='🧠 Another Way to Think';$('feedback').className='feedback';$('feedback').textContent=practiceMode==='supported'?'Supported Practice: try the answer, or use Another Way to Think whenever you want.':'Independent Practice: type your answer, then check it. Help unlocks after your first attempt.';$('nextBtn').classList.add('hidden');$('practiceProgress').textContent=`${practiceMode==='supported'?'Supported Practice':'Practice'} · Question ${index+1} of ${cards.length}`;setTimeout(()=>$('answer').focus(),80)}
-$('practiceStart').addEventListener('click',()=>startPractice('independent'));$('practiceAgain').addEventListener('click',()=>startPractice(practiceMode));
+$('practiceStart').addEventListener('click',()=>{if(practicePaused&&cards.length&&index<cards.length){practicePaused=false;$('practiceStart').querySelector('.mt').textContent='Start Practice';loadCard();show('practice')}else startPractice('independent')});$('practiceAgain').addEventListener('click',()=>startPractice(practiceMode));
 $('thinkBtn').addEventListener('click',()=>{
   if(practiceMode!=='supported'&&!answered)return;
   const {f,n}=cards[index],ways=strategyLibrary(f,n);
