@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Adult Review Centre · Maya Maths</title>
+  <style>
+    :root{--navy:#17324d;--blue:#347fb8;--green:#31875d;--cream:#fffaf0;--line:#d8e4ed;--muted:#60788d;--soft:#eef7ff;--gold:#fff5dc}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Trebuchet MS",Arial,sans-serif;color:var(--navy);background:linear-gradient(135deg,var(--cream),#eef7ff 70%)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;background:#ffffffdf;border-bottom:1px solid var(--line)}
+    a{color:inherit}.wrap{width:min(980px,calc(100% - 28px));margin:28px auto 60px}.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 11px 30px #17324d16;margin-bottom:18px}.hidden{display:none!important}
+    .eyebrow{font-size:.78rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}h1,h2{margin:6px 0 10px}.muted{color:var(--muted);line-height:1.5}.review-notice{background:var(--gold);border:2px solid #e5bd69;border-radius:16px;padding:16px;line-height:1.45;margin:15px 0}.review-notice strong{display:block;font-size:1.08rem}
+    .button{display:inline-block;text-decoration:none;border-radius:11px;padding:11px 15px;font-weight:900;border:1px solid var(--line);background:#fff}.button.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.button.green{background:var(--green);color:#fff;border-color:var(--green)}
+    .subject-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.subject{display:flex;flex-direction:column;min-height:250px}.subject .button{margin-top:auto;text-align:center}.facts{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.chip{padding:7px 9px;border:2px solid #8bb9da;border-radius:9px;background:var(--soft);font-weight:900}.lesson-list{display:grid;gap:9px;margin-top:14px}.lesson{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;border:1px solid var(--line);border-radius:13px;text-decoration:none;background:#fff}.lesson:hover{border-color:var(--blue)}.lesson small{display:block;color:var(--muted);margin-bottom:2px}.go{color:var(--green);font-weight:900;white-space:nowrap}.library{display:grid;grid-template-columns:1fr 1fr;gap:9px}.library .lesson{align-items:flex-start}.status{padding:11px;border-radius:11px;background:var(--soft);color:var(--muted)}
+    @media(max-width:700px){.subject-grid,.library{grid-template-columns:1fr}.subject{min-height:220px}.lesson{align-items:flex-start;flex-direction:column}.go{width:100%}}
+  </style>
+</head>
+<body>
+  <header><strong>🧩 Maya Maths · Adult Review</strong><a class="button" href="parent.html">← Adult Dashboard</a></header>
+  <main class="wrap">
+    <section id="loading" class="card"><h1>Opening the Adult Review Centre…</h1><p class="muted">Checking secure adult access and loading Maya’s saved programme.</p></section>
+    <section id="review" class="hidden">
+      <div class="card">
+        <span class="eyebrow">Administrator · Tutor · Parent</span>
+        <h1>Review Maya’s learning</h1>
+        <div class="review-notice"><strong>Adult review mode</strong>Your answers, hints and lesson activity will not be recorded as Maya’s learning or change her progress.</div>
+        <p id="signedIn" class="muted"></p>
+      </div>
+
+      <section class="card">
+        <span class="eyebrow">What Maya sees</span>
+        <h2>Maya’s currently assigned programme</h2>
+        <p class="muted">These are the facts and lessons currently saved for Maya. Open either subject to see and test the learner experience without entering Maya’s PIN.</p>
+        <div class="subject-grid">
+          <article class="card subject" style="box-shadow:none;margin:0">
+            <div style="font-size:2.4rem">✖️</div><h2>Multiplication</h2>
+            <div id="assignedFacts" class="facts"></div>
+            <a id="assignedMultiplication" class="button primary" href="multiplication.html?mode=preview&amp;cloud=1">Preview Maya’s Multiplication</a>
+          </article>
+          <article class="card subject" style="box-shadow:none;margin:0">
+            <div style="font-size:2.4rem">🍕</div><h2>Fractions</h2>
+            <div id="assignedFractions" class="lesson-list"></div>
+            <span class="muted" style="margin-top:auto">Open an assigned lesson above to see it in Maya’s simplified lesson pathway.</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="card">
+        <span class="eyebrow">Lesson library</span>
+        <h2>Review all released learning</h2>
+        <p class="muted">This library is for tutor and parent review. A lesson does not need to be assigned to Maya before an adult can inspect it.</p>
+        <p><a class="button green" href="multiplication.html?mode=review&amp;cloud=1">Review all Multiplication tables</a></p>
+        <div id="fractionLibrary" class="library"></div>
+      </section>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.3"></script><script src="cloud-config.js"></script><script src="cloud.js"></script>
+  <script>
+    const $=s=>document.querySelector(s);
+    const FRACTIONS=[[1,'A','Why fractions matter'],[2,'A','The whole'],[3,'A','Equal parts'],[4,'A','Halves'],[5,'A','Thirds'],[6,'A','Quarters'],[7,'A','Numerator & denominator'],[8,'B','Sixths'],[9,'B','Eighths'],[10,'B','Tenths'],[11,'B','Making one whole'],[12,'B','Compare & connect'],[13,'C','Equivalent fractions'],[16,'C','Quarter pieces beyond one whole']];
+    const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    async function start(){
+      try{
+        const session=await MayaCloud.session(),role=await MayaCloud.adultRole();
+        if(!session?.user?.email||!role){location.replace('parent.html');return}
+        const assignment=await MayaCloud.assignment(),m=assignment.multiplication||{},selections=m.selections||{},assigned=Array.isArray(assignment.fractions)?assignment.fractions:[];
+        $('#signedIn').textContent=`Signed in as ${session.user.email} · ${role.charAt(0).toUpperCase()+role.slice(1)}`;
+        const facts=Object.entries(selections).sort((a,b)=>Number(a[0])-Number(b[0])).flatMap(([f,ns])=>ns.map(n=>`${f} × ${n}`));
+        $('#assignedFacts').innerHTML=facts.length?facts.map(x=>`<span class="chip">${esc(x)}</span>`).join(''):'<span class="status">No Multiplication facts are currently assigned.</span>';
+        $('#assignedMultiplication').classList.toggle('hidden',!facts.length);
+        $('#assignedFractions').innerHTML=assigned.length?assigned.map((id,i)=>{const x=FRACTIONS.find(f=>f[0]===id);if(!x)return'';return `<a class="lesson" href="fractions.html?mode=preview&cloud=1&lesson=${id}"><span><small>Assigned lesson ${i+1} · Part ${x[1]}</small><b>${esc(x[2])}</b></span><span class="go">Open →</span></a>`}).join(''):'<span class="status">No Fractions lessons are currently assigned.</span>';
+        $('#fractionLibrary').innerHTML=FRACTIONS.map(([id,part,title],i)=>`<a class="lesson" href="fractions.html?mode=review&cloud=1&lesson=${id}"><span><small>${i+1} · Part ${part}</small><b>${esc(title)}</b></span><span class="go">Review →</span></a>`).join('');
+        $('#loading').classList.add('hidden');$('#review').classList.remove('hidden');
+      }catch(e){console.error(e);$('#loading').innerHTML='<h1>Adult review could not be opened</h1><p>Please return to the Adult Dashboard and sign in again.</p><a class="button" href="parent.html">Return to Adult Dashboard</a>'}
+    }
+    start();
+  </script>
+</body>
+</html>

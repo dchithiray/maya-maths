@@ -249,7 +249,7 @@ const defaults={
 };
 function read(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
 let cloudStatsTimer;
-function write(key,value){localStorage.setItem(key,JSON.stringify(value));if(key==='mm_stats'&&typeof cloudMode!=='undefined'&&cloudMode&&!previewMode&&window.MayaCloud){clearTimeout(cloudStatsTimer);cloudStatsTimer=setTimeout(()=>MayaCloud.saveProgress('multiplication',{stats:value,summary:multiplicationCloudSummary(value)}).catch(console.error),700)}}
+function write(key,value){if(key==='mm_stats'&&typeof adultReviewMode!=='undefined'&&adultReviewMode)return;localStorage.setItem(key,JSON.stringify(value));if(key==='mm_stats'&&typeof cloudMode!=='undefined'&&cloudMode&&!adultReviewMode&&window.MayaCloud){clearTimeout(cloudStatsTimer);cloudStatsTimer=setTimeout(()=>MayaCloud.saveProgress('multiplication',{stats:value,summary:multiplicationCloudSummary(value)}).catch(console.error),700)}}
 function multiplicationCloudSummary(value){let s=value?.sessions?.[0];return s?`Latest practice: ${s.correct}/${s.total} correct and ${s.independent}/${s.total} independent`:'Multiplication practice started'}
 function showConfirmation(element,message,type='success'){
   element.className=`feedback ${type}`;
@@ -272,8 +272,9 @@ function lessonFactPairs(){return selectedFactors(lesson.selections).flatMap(f=>
 function show(id){screens.forEach(s=>s.classList.toggle('active',s.id===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='parentArea')renderParent();if(id==='learnerHome')renderLearner()}
 const pageMode = new URLSearchParams(location.search).get('mode');
 const learnerMode = pageMode==='learner';
-const previewMode = pageMode==='preview';
-const cloudMode = (learnerMode||previewMode)&&new URLSearchParams(location.search).get('cloud')==='1';
+const adultReviewMode = pageMode==='preview'||pageMode==='review';
+const previewMode = adultReviewMode;
+const cloudMode = (learnerMode||adultReviewMode)&&new URLSearchParams(location.search).get('cloud')==='1';
 function learnerHome(){
   if($('practice').classList.contains('active')&&cards.length){
     if(answered&&currentResult){
@@ -778,9 +779,10 @@ deleteHistoryBtn.addEventListener('click',()=>{
 });
 const direct=new URLSearchParams(location.search).get('mode');
 async function startMultiplication(){
+ if(adultReviewMode&&window.MayaCloud){let role=await MayaCloud.adultRole();if(!role){location.replace('parent.html');return}let banner=document.createElement('div');banner.style.cssText='margin:14px auto 0;width:min(1120px,calc(100% - 28px));padding:13px 16px;border:2px solid #e5bd69;border-radius:14px;background:#fff5dc;color:#17324d;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap';banner.innerHTML='<span><strong>Adult review mode</strong><br><small>Your answers and activity will not be recorded as Maya\'s learning.</small></span><a href="review.html" style="padding:9px 12px;border-radius:10px;background:#fff;color:#17324d;border:1px solid #d8e4ed;text-decoration:none;font-weight:900">← Review Centre</a>';document.querySelector('.app').insertBefore(banner,document.querySelector('main'))}
  if(learnerMode&&cloudMode&&window.MayaCloud){try{let until=await MayaCloud.learnerSessionStatus();if(!until){location.replace('learner.html?locked=1');return}let left=new Date(until).getTime()-Date.now();setTimeout(()=>location.replace('learner.html?locked=1'),Math.max(0,left))}catch(e){location.replace('learner.html?locked=1');return}}
- if(cloudMode&&window.MayaCloud){try{let a=await MayaCloud.assignment(),m=a.multiplication||{};lesson={factor:Number(Object.keys(m.selections||{})[0]||8),facts:Object.values(m.selections||{})[0]||[],selections:m.selections||{},questions:Number(m.questions||10)};localStorage.setItem('mm_lesson',JSON.stringify(lesson));let p=await MayaCloud.progress('multiplication');if(p?.data?.stats){stats=p.data.stats;localStorage.setItem('mm_stats',JSON.stringify(stats))}tempSelections={};Object.entries(lesson.selections).forEach(([f,fs])=>tempSelections[f]=new Set(fs))}catch(e){console.error(e);alert('Maya’s cloud programme could not be loaded. Please return to Maya’s Learning and try again.')}}
- renderGeneral();renderLearner();if(direct==='learner')show('learnerHome');
+ if(cloudMode&&window.MayaCloud){try{let a=await MayaCloud.assignment(),m=a.multiplication||{};if(pageMode==='review'){let all={};for(let f=2;f<=9;f++)all[String(f)]=Array.from({length:12},(_,i)=>i+1);m={selections:all,questions:10}}lesson={factor:Number(Object.keys(m.selections||{})[0]||8),facts:Object.values(m.selections||{})[0]||[],selections:m.selections||{},questions:Number(m.questions||10)};if(!adultReviewMode)localStorage.setItem('mm_lesson',JSON.stringify(lesson));if(learnerMode){let p=await MayaCloud.progress('multiplication');if(p?.data?.stats){stats=p.data.stats;localStorage.setItem('mm_stats',JSON.stringify(stats))}}tempSelections={};Object.entries(lesson.selections).forEach(([f,fs])=>tempSelections[f]=new Set(fs))}catch(e){console.error(e);alert('Maya’s cloud programme could not be loaded. Please return to Maya’s Learning and try again.')}}
+ renderGeneral();renderLearner();if(direct==='learner'||adultReviewMode)show('learnerHome');
 }
 startMultiplication();
 </script><script>if(!new URLSearchParams(location.search).has('mode'))document.getElementById('enterParentLogin').addEventListener('click',e=>{e.stopImmediatePropagation();location.href='parent.html'},true);</script>
