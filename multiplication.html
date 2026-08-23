@@ -305,7 +305,7 @@ function renderLearner(){
   $('learnerWelcome').textContent=`Welcome back, ${profile.name}!`;
   const fs=selectedFactors(lesson.selections); $('missionName').textContent=lessonLabel();
   $('missionFacts').innerHTML=lessonFactPairs().map(x=>`<span class="pill">${x.f} × ${x.n}</span>`).join('');
-  const single=fs.length===1, f=fs[0]; const full=single&&[3,4,5,6,7,8,9].includes(f);
+  const single=fs.length===1, f=fs[0]; const full=single&&[2,3,4,5,6,7,8,9].includes(f);
   $('discoverCaption').textContent=full?'Learn patterns and discover different ways to think.':single?'Teaching module coming soon — practice is ready.':'Review the learning strategies for today’s selected tables.';
   $('challengeCaption').textContent=full?'Use what you have learned in a real-life maths problem.':single?'Challenge module coming soon — practice is ready.':'Use today’s selected tables in mixed real-life maths problems.';
   $('discoverBtn').style.display=settings.showActivities?'block':'none';
@@ -448,6 +448,7 @@ function strategyLibrary(f,n){
   const r=f*n,ways=[];
   if(n===10){ways.push({title:'10× shortcut',text:`${f} × 10 = ${r}.`});return ways}
   if(n===11){ways.push({title:'11× shortcut — repeat the factor',text:`${f} × 11 = ${r}. For a single-digit factor, ×11 repeats the digit.`});return ways}
+  if(f===2){ways.push({title:'Primary Strategy — double the number',text:`Double ${n}: ${n} + ${n} = ${r}.`});ways.push({title:'Another Way to Think — count pairs',text:`Count ${n} equal pairs. ${n} groups of 2 make ${r}.`});return ways}
   if(f===3){
     if(n===1){ways.push({title:'Known fact',text:'One group of 3 is 3.'});return ways}
     if(n===2){ways.push({title:'Primary Strategy — double 3',text:'3 + 3 = 6.'});return ways}
@@ -630,7 +631,10 @@ $('discoverBtn').addEventListener('click',()=>{
     show('learn'); return;
   }
   const f=primaryFactor();
-  if(f===3){
+  if(f===2){
+    $('learnIcon').textContent='2️⃣';$('learnTitle').textContent='Discover the Twos';$('learnSub').textContent='Every 2× fact is a double.';
+    $('learnBody').innerHTML='<strong>Primary strategy:</strong> double the other number by adding it to itself.<br><strong>Another Way to Think:</strong> count equal pairs or turn the fact around.'+`<div class="discover-grid"><div class="discover-card"><strong>2 × 3 = 6 — double 3</strong>${practiceVisual(2,3)}</div><div class="discover-card"><strong>2 × 5 = 10 — five pairs</strong>${practiceVisual(2,5)}</div><div class="discover-card"><strong>2 × 8 = 16 — double 8</strong>${practiceVisual(2,8)}</div><div class="discover-card"><strong>2 × 12 = 24 — double 12</strong>${practiceVisual(2,12)}</div></div>`;
+  }else if(f===3){
     $('learnIcon').textContent='3️⃣';$('learnTitle').textContent='Discover the Threes';$('learnSub').textContent='Use the shortest familiar route to each 3× fact.';
     $('learnBody').innerHTML='<strong>Primary strategy:</strong> use facts Maya already knows — doubling, the 5× clock, the 9 strategy, and 10× anchors.<br><strong>Another Way to Think:</strong> show a second route only when it is genuinely simpler or useful.'+discoverThree();
   }else if(f===4){
@@ -656,6 +660,11 @@ $('discoverBtn').addEventListener('click',()=>{
 });
 $('learnPractice').addEventListener('click',()=>startPractice('supported'));
 const challengeBank={
+  2:[
+    {level:'Guided Practice',title:'Apples in Pairs',q:'There are 4 bags with 2 apples in each bag. How many apples are there altogether?',a:8,work:'There are 4 groups of 2. Double 4: 4 + 4 = 8.'},
+    {level:'Apply Your Thinking',title:'Pairs of Socks',q:'Maya has 7 pairs of socks. How many individual socks are there?',a:14,work:'Each pair has 2 socks. Double 7: 7 + 7 = 14.'},
+    {level:'Challenge Yourself',title:'Pencils and Three Extras',q:'Nine packs each contain 2 pencils. Three extra pencils are added. How many pencils are there altogether?',a:21,work:'First double 9: 2 × 9 = 18. Then add 3: 18 + 3 = 21.'}
+  ],
   3:[
     {level:'Guided Practice',title:'Three Apples in Each Bag',q:'There are 4 bags with 3 apples in each bag. How many apples are there altogether?',a:12,work:'There are 4 groups of 3. 3 × 4 = 12.'},
     {level:'Apply Your Thinking',title:'Books on Shelves',q:'Seven shelves each hold 3 books. How many books are there altogether?',a:21,work:'Use the 3×5 and 3×2 anchors: 15 + 6 = 21.'},
