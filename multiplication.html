@@ -77,6 +77,7 @@ h3{margin:0 0 10px}.sub{font-size:clamp(1rem,2.5vw,1.18rem);color:#4b647c;margin
 .math-line{text-align:center;font-weight:900;font-size:1.05rem;margin:8px 0}.math-line.big{font-size:1.25rem;color:#174f82}
 .visual-plus,.visual-minus{font-size:1.7rem;font-weight:900;align-self:center}.cluster-label{text-align:center;font-weight:800;font-size:.9rem;margin-top:5px}
 .discover-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.discover-card{border:1px solid #d8e6f0;border-radius:16px;padding:12px;background:#fff}
+.skip-counting{margin:0 0 18px;border:2px solid #9fc7e8;border-radius:18px;background:#f8fcff;overflow:hidden}.skip-counting summary{list-style:none;cursor:pointer;padding:15px 17px;background:var(--blue);color:#fff;font-size:1.06rem;font-weight:900}.skip-counting summary::-webkit-details-marker{display:none}.skip-counting summary:after{content:'＋';float:right;font-size:1.25rem}.skip-counting[open] summary:after{content:'−'}.skip-counting-body{padding:16px}.skip-counting h3{margin:0 0 5px}.skip-counting-intro{margin:0 0 13px;color:var(--muted);line-height:1.45}.skip-columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.skip-column{overflow:hidden;border:1px solid #cfe0ee;border-radius:15px;background:#fff}.skip-column-title{padding:11px 13px;background:var(--blue-soft);font-size:1.08rem;font-weight:900}.skip-row{display:grid;grid-template-columns:minmax(76px,auto) 20px minmax(54px,1fr) auto;align-items:center;gap:7px;min-height:43px;padding:6px 10px;border-top:1px solid #e5eef5}.skip-row:first-of-type{border-top:0}.skip-equation{font-weight:900}.skip-equals{text-align:center;font-weight:900}.skip-answer{font-size:1.04rem;font-weight:900;color:#174f82}.skip-input{width:72px!important;margin:0!important;padding:7px 6px!important;border-radius:9px!important;text-align:center;font-size:1.05rem;font-weight:900}.skip-input.correct{border-color:var(--green)!important;background:var(--green-soft)}.skip-input.incorrect{border-color:var(--red)!important;background:#fff0f1}.skip-hint-btn{padding:7px 9px;border:1px solid #cfe0ee;border-radius:9px;background:#fff;color:var(--blue);font-size:.78rem;font-weight:900}.skip-hint{grid-column:1/-1;margin:2px 0 3px;padding:8px 10px;border-radius:9px;background:#fff7e8;color:var(--navy);font-size:.86rem;line-height:1.4}.skip-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:13px}.skip-check{padding:10px 14px;border-radius:10px;background:var(--blue);color:#fff;font-weight:900}.skip-feedback{font-weight:900}.skip-feedback.good-text{color:var(--green)}.skip-feedback.try-text{color:#a05b00}
 .fact-memory{display:flex;justify-content:center;gap:30px;font-size:1.4rem;font-weight:900;margin:10px 0;letter-spacing:.04em}
 .partitioned-card{min-width:48px;padding:7px 6px;border:2px solid #9fc7e8;border-radius:10px;background:#f8fcff;display:flex;gap:6px;justify-content:center;align-items:center}
 .partition-part{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;max-width:22px}.partition-divider{width:2px;align-self:stretch;background:#9fc7e8;border-radius:2px}
@@ -86,7 +87,7 @@ h3{margin:0 0 10px}.sub{font-size:clamp(1rem,2.5vw,1.18rem);color:#4b647c;margin
 .clock-sequence{text-align:center;font-weight:900;word-spacing:8px;line-height:1.8;margin-top:10px}
 .flow-visual{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0}.flow-step{background:var(--blue-soft);border:1px solid #cfe0ee;border-radius:12px;padding:10px 12px;font-weight:900}.flow-arrow{font-size:1.35rem;font-weight:900;color:var(--blue)}
 
-@media(max-width:760px){.discover-grid{grid-template-columns:1fr}.set-card{min-width:30px}.fact-memory{gap:18px;font-size:1.2rem}}
+@media(max-width:760px){.discover-grid{grid-template-columns:1fr}.set-card{min-width:30px}.fact-memory{gap:18px;font-size:1.2rem}.skip-columns{grid-template-columns:1fr}}
 @media(max-width:760px){
   .entry-grid,.menu{grid-template-columns:1fr}.entry{min-height:120px}
   .parent-tabs{grid-template-columns:1fr 1fr}.stats-grid{grid-template-columns:1fr 1fr}
@@ -436,6 +437,46 @@ function discoverSix(){return `<div class="discover-grid"><div class="discover-c
 function discoverSeven(){return `<div class="fact-memory"><span>42</span><span>49</span><span>56</span></div><div class="discover-grid"><div class="discover-card"><strong>7 × 6 = 42</strong>${splitVisual(7,3,3,42)}</div><div class="discover-card"><strong>7 × 7 = 49</strong>${splitVisual(7,5,2,49)}</div><div class="discover-card"><strong>7 × 8 = 56 — build from 10×</strong>${sevenEightVisual()}<div class="notice"><strong>Memory trick:</strong> 7, 8 … 5, 6. They are neighbours: 7 × 8 = 56.</div></div><div class="discover-card"><strong>7 × 9 = 63 — use the 9 strategy</strong>${secretNineVisual(7)}<div class="notice"><strong>Another Way to Think:</strong> 10 × 7 = 70; take away 1 × 7 = 7; 70 − 7 = 63.</div>${minusVisual(7,10,1,63)}</div></div>`}
 function discoverEight(){return `<div class="discover-grid"><div class="discover-card"><strong>8 × 5 = 40 — halve the 10× fact</strong>${halveTenVisual(8)}</div><div class="discover-card"><strong>8 × 6 = 48 — double the related 4× fact</strong>${flowVisual(['4 × 6 = 24','double 24','48'])}</div><div class="discover-card"><strong>8 × 7 = 56 — build from 10×</strong>${sevenEightVisual()}</div></div>`}
 function discoverNine(){let pattern=Array.from({length:8},(_,i)=>{let n=i+2,a=9*n,t=Math.floor(a/10),o=a%10;return `<div class="math-line"><b>9 × ${n} = ${a}</b> <span class="small">→ ${t} + ${o} = 9</span></div>`}).join('');return `<div class="notice"><strong>Slow down and watch the pattern.</strong><br>For 9 × a number, the first answer digit is one less than that number. The two answer digits then add to 9.</div><div class="discover-grid"><div class="discover-card"><strong>Build ten as two clear groups of five</strong><div class="fact-memory"><span>● ● ● ● ●</span><span>● ● ● ● ●</span></div><div class="math-line big">5 + 5 = 10</div><p>Now imagine one item missing from each group of ten. Each complete group has 9.</p></div><div class="discover-card"><strong>Read one line at a time</strong>${pattern}</div><div class="discover-card"><strong>9 × 7 = 63 — say each step</strong><div class="math-line big">One less than 7 is 6.</div><div class="math-line big">6 + 3 = 9.</div><div class="math-line big">So 9 × 7 = 63.</div>${minusVisual(7,10,1,63)}</div></div>`}
+const skipGapPriority={2:[4,7,11],3:[4,7,11],4:[3,7,11],5:[4,7,11],6:[4,7,11],7:[6,8,12],8:[6,8,12],9:[4,7,11]};
+function skipCountingGaps(f){
+  const selected=(lesson.selections[String(f)]||[]).map(Number);
+  const priority=skipGapPriority[f]||[6,7,8];
+  const chosen=[...priority.filter(n=>selected.includes(n)),...selected.filter(n=>!priority.includes(n))];
+  const limit=Math.min(3,Math.max(1,Math.ceil(selected.length/2)));
+  return [...new Set(chosen)].slice(0,limit);
+}
+function skipCountingPanel(factors){
+  const columns=factors.map(f=>{
+    const gaps=new Set(skipCountingGaps(f));
+    const rows=Array.from({length:12},(_,i)=>{
+      const n=i+1,answer=f*n;
+      if(!gaps.has(n))return `<div class="skip-row"><span class="skip-equation">${f} × ${n}</span><span class="skip-equals">=</span><span class="skip-answer">${answer}</span><span aria-hidden="true"></span></div>`;
+      const previous=n===1?`Begin with one group of ${f}.`:`The previous answer is ${f*(n-1)}. Add one more ${f}.`;
+      return `<div class="skip-row" data-skip-row data-factor="${f}" data-fact="${n}" data-answer="${answer}"><label class="skip-equation" for="skip-${f}-${n}">${f} × ${n}</label><span class="skip-equals">=</span><input id="skip-${f}-${n}" class="skip-input" type="number" inputmode="numeric" aria-label="Answer for ${f} times ${n}"><button class="skip-hint-btn" type="button" data-skip-hint>Show hint</button><div class="skip-hint hidden" data-skip-hint-text>${previous}</div></div>`;
+    }).join('');
+    return `<section class="skip-column"><div class="skip-column-title">×${f} table · add ${f} each time</div>${rows}</section>`;
+  }).join('');
+  const label=factors.length===1?`Open the ×${factors[0]} skip-counting table`:'Open the skip-counting tables';
+  return `<details class="skip-counting"><summary>${label}</summary><div class="skip-counting-body"><h3>See the pattern. Fill the gaps.</h3><p class="skip-counting-intro">Read down each table as skip counting. Every new line adds one more group. Say the facts aloud as you go.</p><div class="skip-columns">${columns}</div><div class="skip-actions"><button class="skip-check" type="button" data-skip-check>Check my gaps</button><span class="skip-feedback" data-skip-feedback aria-live="polite"></span></div></div></details>`;
+}
+function activateSkipCounting(){
+  const panel=document.querySelector('#learnBody .skip-counting');if(!panel)return;
+  panel.querySelectorAll('[data-skip-hint]').forEach(button=>button.addEventListener('click',()=>{
+    const hint=button.closest('[data-skip-row]').querySelector('[data-skip-hint-text]');
+    const showing=hint.classList.toggle('hidden');button.textContent=showing?'Show hint':'Hide hint';
+  }));
+  const check=()=>{
+    const rows=[...panel.querySelectorAll('[data-skip-row]')];let correct=0,answered=0;
+    rows.forEach(row=>{const input=row.querySelector('.skip-input'),value=input.value.trim();input.classList.remove('correct','incorrect');if(value==='')return;answered++;if(Number(value)===Number(row.dataset.answer)){correct++;input.classList.add('correct')}else input.classList.add('incorrect')});
+    const feedback=panel.querySelector('[data-skip-feedback]');feedback.className='skip-feedback '+(correct===rows.length?'good-text':'try-text');
+    if(correct===rows.length)feedback.textContent='All the gaps are correct. Read the completed tables aloud once more.';
+    else if(!answered)feedback.textContent='Fill at least one gap first. Use Show hint if you need it.';
+    else feedback.textContent=`${correct} of ${rows.length} gaps correct. Check the highlighted gaps or use a hint.`;
+  };
+  panel.querySelector('[data-skip-check]').addEventListener('click',check);
+  panel.querySelectorAll('.skip-input').forEach(input=>input.addEventListener('keydown',event=>{if(event.key==='Enter')check()}));
+}
+function addSkipCountingToLearn(factors){$('learnBody').insertAdjacentHTML('afterbegin',skipCountingPanel(factors));activateSkipCounting()}
 function challengeVisual(f,i){
   if(f===3){return [clusterOnlyVisual(3,4,12),flowVisual(['3 × 5 = 15','3 × 2 = 6','15 + 6 = 21']),flowVisual(['3 × 8 = 24','+ 2','26'])][i]||''}
   if(f===4){return [partitionedSetsVisual(4,3,2,2,12),partitionedSetsVisual(4,7,2,2,28),flowVisual(['8 sets of 4 = 32','+ 2','34']),divisionVisual(12,4,3),divisionVisual(28,4,7),flowVisual(['34','− 2 = 32','32 ÷ 8 = 4'])][i]||''}
@@ -628,7 +669,7 @@ $('discoverBtn').addEventListener('click',()=>{
     $('learnIcon').textContent='🧠';$('learnTitle').textContent='Discover Today’s Mixed Tables';$('learnSub').textContent='Review the shortest useful strategy for each selected table.';
     const summaries={3:'<strong>×3:</strong> use the shortest known anchor — double, the 5× clock, the 9 strategy, or 10× ± a small adjustment.',4:'<strong>×4:</strong> use the 2× fact, then double it.',5:'<strong>×5:</strong> count in fives and use the 12 sets of 5 clock pattern.',6:'<strong>×6:</strong> use the shortest known anchor — often 5× plus one more; use ×10, ×11 and ×12 shortcuts where easier.',7:'<strong>×7:</strong> use known anchors and remember 42, 49 and 56.',8:'<strong>×8:</strong> double a useful 4× fact or use a known anchor.',9:'<strong>×9:</strong> use the 9 pattern or 10× minus one group.'};
     $('learnBody').innerHTML=fs.map(f=>`<div class="mixed-learn-item">${summaries[f]||`<strong>×${f}:</strong> use the shortest known route.`}</div>`).join('');
-    show('learn'); return;
+    addSkipCountingToLearn(fs);show('learn'); return;
   }
   const f=primaryFactor();
   if(f===2){
@@ -656,7 +697,7 @@ $('discoverBtn').addEventListener('click',()=>{
     $('learnIcon').textContent='✨';$('learnTitle').textContent='The Secret of Nine';$('learnSub').textContent='Watch the tens digit rise while the ones digit falls.';
     $('learnBody').innerHTML='<strong>Primary strategy:</strong> use the Secret of Nine: the tens digit is one less than n and the two answer digits add to 9.<br><strong>Another Way to Think:</strong> use 10×n, then remove one group of n.'+discoverNine();
   }else{$('learnIcon').textContent='🚧';$('learnTitle').textContent=`The ${f}s learning module is coming soon`;$('learnSub').textContent='Flash-card practice is ready now.';$('learnBody').textContent='We are developing special visual strategies and activities for this factor.'}
-  show('learn')
+  addSkipCountingToLearn([f]);show('learn')
 });
 $('learnPractice').addEventListener('click',()=>startPractice('supported'));
 const challengeBank={

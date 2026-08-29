@@ -53,7 +53,7 @@
         <div id="tableLibrary" class="table-library"></div>
         <h3>Fractions lesson status</h3>
         <p class="muted">Every planned Fractions lesson is shown below. Only lessons marked <b>Ready to review</b> can be opened or assigned to Maya. Grey lessons remain under development.</p>
-        <div class="status-summary"><span class="development-status ready">14 ready to review</span><span class="development-status pending">8 under development</span></div>
+        <div class="status-summary"><span class="development-status ready">17 ready to review</span><span class="development-status pending">6 under development</span></div>
         <div id="fractionLibrary" class="library"></div>
       </section>
     </section>
@@ -62,8 +62,8 @@
   <script>
     const $=s=>document.querySelector(s);
     const TABLES=[2,3,4,5,6,7,8,9];
-    const READY_FRACTIONS=new Set([1,2,3,4,5,6,7,8,9,10,11,12,13,16]);
-    const FRACTIONS=[[1,'A','Why fractions matter'],[2,'A','The whole'],[3,'A','Equal parts'],[4,'A','Halves'],[5,'A','Thirds'],[6,'A','Quarters'],[7,'A','Numerator & denominator'],[8,'B','Sixths'],[9,'B','Eighths'],[10,'B','Tenths'],[11,'B','Making one whole'],[12,'B','Compare & connect'],[13,'C','Equivalent fractions'],[14,'C','Simplifying fractions'],[15,'C','Compare & order'],[16,'C','Quarter pieces beyond one whole'],[17,'C','Like denominators'],[18,'C','Common denominators'],[19,'C','Unlike denominators'],[20,'C','Fraction of a quantity'],[21,'C','Whole number × fraction'],[22,'C','Fraction × fraction']];
+    const READY_FRACTIONS=new Set([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17]);
+    const FRACTIONS=[[0,'A','What is a fraction?'],[1,'A','Why fractions matter'],[2,'A','The whole'],[3,'A','Equal parts'],[4,'A','Halves'],[5,'A','Thirds'],[6,'A','Quarters'],[7,'A','Numerator & denominator'],[8,'B','Sixths'],[9,'B','Eighths'],[10,'B','Tenths'],[11,'B','Making one whole'],[12,'B','Compare & connect'],[13,'C','Equivalent fractions'],[14,'C','Simplifying fractions'],[15,'C','Compare & order'],[16,'C','Quarter pieces beyond one whole'],[17,'C','Like denominators'],[18,'C','Common denominators'],[19,'C','Unlike denominators'],[20,'C','Fraction of a quantity'],[21,'C','Whole number × fraction'],[22,'C','Fraction × fraction']];
     const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     async function start(){
       try{
