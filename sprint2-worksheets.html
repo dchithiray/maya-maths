@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Maya Maths — Sprint 2 Working Paper</title>
+  <style>
+    :root{--ink:#18324a;--blue:#2576b9;--line:#aebdca;--pale:#edf6fd}
+    *{box-sizing:border-box}body{margin:0;background:#eef2f6;color:var(--ink);font-family:Arial,sans-serif;line-height:1.35}.toolbar{position:sticky;top:0;display:flex;justify-content:center;gap:10px;padding:12px;background:#18324a}.toolbar button,.toolbar a{border:0;border-radius:9px;background:#fff;color:var(--ink);padding:9px 13px;font-weight:700;text-decoration:none;cursor:pointer}.sheet{width:210mm;min-height:297mm;margin:14px auto;padding:15mm;background:#fff;box-shadow:0 6px 24px #0002;page-break-after:always}.sheet:last-child{page-break-after:auto}.head{display:flex;justify-content:space-between;gap:20px;border-bottom:3px solid var(--blue);padding-bottom:9px}.head h1{font-size:23px;margin:0}.head p{margin:3px 0 0}.name{min-width:220px;border-bottom:1px solid var(--ink);align-self:end;padding-bottom:3px}.question{margin:14px 0;padding:10px 12px;border:2px solid var(--blue);border-radius:10px;background:var(--pale);font-size:17px;font-weight:700}.rulebox{margin:10px 0;padding:9px 11px;border-left:5px solid var(--blue);background:var(--pale);font-size:13px;font-weight:700}.step{display:grid;grid-template-columns:34px 1fr;gap:10px;margin:10px 0;padding:10px;border:1.5px solid var(--line);border-radius:10px;break-inside:avoid}.num{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:#fff;font-weight:800}.step h2{font-size:16px;margin:0 0 3px}.step p{font-size:12px;margin:0 0 7px}.lines{height:31mm;background:repeating-linear-gradient(to bottom,transparent 0,transparent 8mm,#bdc8d1 8.2mm,#bdc8d1 8.5mm)}.short .lines{height:22mm}.long .lines{height:52mm}.check{display:flex;gap:8px;align-items:center;margin-top:5px;font-size:12px;font-weight:700}.box{width:15px;height:15px;border:1.5px solid var(--ink)}.footer{margin-top:10px;font-size:11px;text-align:center;color:#516578}@media print{body{background:#fff}.toolbar{display:none}.sheet{margin:0;box-shadow:none;width:auto;min-height:297mm}}
+  </style>
+</head>
+<body>
+  <div class="toolbar"><button onclick="print()">Print worksheets</button><a href="fraction-toolkit.html">Fraction toolkit</a><a href="fractions.html">Return to Fractions</a></div>
+
+  <section class="sheet">
+    <div class="head"><div><h1>Concept 18B · Compare different denominators</h1><p>Find, rename, compare.</p></div><div class="name">Name: ____________________</div></div>
+    <div class="question">Question: __________________________________________________________</div>
+    <div class="rulebox">Use only the numbers in the question. A one-fraction conversion needs one bottom number; a comparison needs two.</div>
+    <div class="step short"><div class="num">1</div><div><h2>Write the fraction or fractions</h2><p>Circle each bottom number that is actually shown in the question.</p><div class="lines"></div><div class="check"><span class="box"></span> Step checked</div></div></div>
+    <div class="step short"><div class="num">2</div><div><h2>Find the target bottom number</h2><p>For one fraction, use the target in the question. For two fractions, list multiples and circle the lowest number in both lists.</p><div class="lines"></div><div class="check"><span class="box"></span> Step checked</div></div></div>
+    <div class="step short"><div class="num">3</div><div><h2>Rename only fractions that need to change</h2><p>If a bottom number does not match the target, complete: current bottom × ? = target bottom. Use that multiplier on the top and bottom. If it already matches, leave it unchanged.</p><div class="lines"></div><div class="check"><span class="box"></span> Step checked</div></div></div>
+    <div class="step short"><div class="num">4</div><div><h2>Answer the original question</h2><p>Write the converted fraction, or compare the new top numbers if two fractions were given.</p><div class="lines"></div><div class="check"><span class="box"></span> Answer and check complete</div></div></div>
+    <div class="footer">Keep every line of working visible. Choose the on-screen answer only after all four steps are complete.</div>
+  </section>
+
+  <section class="sheet">
+    <div class="head"><div><h1>Concept 19 · Add or subtract different denominators</h1><p>Make the pieces match first.</p></div><div class="name">Name: ____________________</div></div>
+    <div class="question">Question: __________________________________________________________</div>
+    <div class="rulebox">Addition or subtraction: make the bottom numbers match first. The lowest common denominator becomes the target bottom number. This is not the multiplication rule.</div>
+    <div class="step short"><div class="num">1</div><div><h2>Find the lowest common denominator</h2><p>List multiples of both bottom numbers. Circle the lowest number in both lists. This is the target bottom number.</p><div class="lines"></div><div class="check"><span class="box"></span> Step checked</div></div></div>
+    <div class="step short"><div class="num">2</div><div><h2>Rename only fractions that need to change</h2><p>If a bottom number does not match the target, complete: current bottom × ? = target bottom. Use that multiplier on the top and bottom. If it already matches, leave it unchanged.</p><div class="lines"></div><div class="check"><span class="box"></span> Step checked</div></div></div>
+    <div class="step short"><div class="num">3</div><div><h2>Add or subtract the top numbers</h2><p>The bottom numbers now match. Keep that common bottom number.</p><div class="lines"></div><div class="check"><span class="box"></span> Step checked</div></div></div>
+    <div class="step short"><div class="num">4</div><div><h2>Finish the answer</h2><p>Simplify if possible. If needed, make complete whole groups.</p><div class="lines"></div><div class="check"><span class="box"></span> Answer and check complete</div></div></div>
+    <div class="footer">Keep every line of working visible. Choose the on-screen answer only after all four steps are complete.</div>
+  </section>
+
+  <section class="sheet">
+    <div class="head"><div><h1>Concept 20 · Find a fraction of a number</h1><p>Split first, then count.</p></div><div class="name">Name: ____________________</div></div>
+    <div class="question">Question: __________________________________________________________</div>
+    <div class="rulebox">Once the grouping idea is understood, use two calculations: divide by the bottom number, then multiply by the top number.</div>
+    <div class="step long"><div class="num">1</div><div><h2>Divide by the bottom number</h2><p>Starting number ÷ bottom number = one equal group.</p><div class="lines"></div><div class="check"><span class="box"></span> First calculation complete</div></div></div>
+    <div class="step long"><div class="num">2</div><div><h2>Multiply by the top number</h2><p>One-group answer × top number = final answer.</p><div class="lines"></div><div class="check"><span class="box"></span> Final answer and unit complete</div></div></div>
+    <div class="footer">Keep both calculations visible. Choose the on-screen answer only after the two-step method is complete.</div>
+  </section>
+
+  <section class="sheet">
+    <div class="head"><div><h1>Concept 21 · Whole number × fraction</h1><p>Count repeated fraction groups.</p></div><div class="name">Name: ____________________</div></div>
+    <div class="question">Question: __________________________________________________________</div>
+    <div class="step short"><div class="num">1</div><div><h2>Write the multiplication as repeated groups</h2><p>Show the fraction once for each group.</p><div class="lines"></div><div class="check"><span class="box"></span> Step checked</div></div></div>
+    <div class="step short"><div class="num">2</div><div><h2>Count the fraction pieces</h2><p>Whole number × top number. Keep the bottom number.</p><div class="lines"></div><div class="check"><span class="box"></span> Step checked</div></div></div>
+    <div class="step short"><div class="num">3</div><div><h2>Use division if the fraction is improper</h2><p>Divide the new top number by the bottom number. The answer gives the wholes; the remainder becomes the new top number.</p><div class="lines"></div><div class="check"><span class="box"></span> Step checked</div></div></div>
+    <div class="step short"><div class="num">4</div><div><h2>Simplify and check</h2><p>Simplify the fractional part. Compare the answer with the repeated groups in Step 1.</p><div class="lines"></div><div class="check"><span class="box"></span> Answer and check complete</div></div></div>
+    <div class="footer">Keep every line of working visible. Choose the on-screen answer only after all four steps are complete.</div>
+  </section>
+
+  <section class="sheet">
+    <div class="head"><div><h1>Concept 22 · Fraction × fraction</h1><p>Multiply top, multiply bottom, write, simplify.</p></div><div class="name">Name: ____________________</div></div>
+    <div class="question">Question: __________________________________________________________</div>
+    <div class="rulebox">Multiplication: do not find a common denominator. Write one continuous line: fraction × fraction = (top × top)/(bottom × bottom) = new fraction = simplest form.</div>
+    <div class="step short"><div class="num">1</div><div><h2>Multiply the top numbers</h2><p>Copy the question, then write and answer the top-number multiplication.</p><div class="lines"></div><div class="check"><span class="box"></span> Step checked</div></div></div>
+    <div class="step short"><div class="num">2</div><div><h2>Multiply the bottom numbers</h2><p>Write and answer the bottom-number multiplication.</p><div class="lines"></div><div class="check"><span class="box"></span> Step checked</div></div></div>
+    <div class="step short"><div class="num">3</div><div><h2>Write the new fraction</h2><p>Put the Step 1 answer over the Step 2 answer.</p><div class="lines"></div><div class="check"><span class="box"></span> Step checked</div></div></div>
+    <div class="step short"><div class="num">4</div><div><h2>Simplify and check</h2><p>Use Concept 14. Divide the new top and bottom numbers by the same whole number if possible.</p><div class="lines"></div><div class="check"><span class="box"></span> Answer and check complete</div></div></div>
+    <div class="footer">Keep every line of working visible. Choose the on-screen answer only after all four steps are complete.</div>
+  </section>
+</body>
+</html>

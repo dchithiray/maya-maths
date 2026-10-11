@@ -16,7 +16,7 @@
   </style>
 </head>
 <body>
-  <header><strong>🧩 Maya Maths · Adult Review</strong><a class="button" href="parent.html">← Adult Dashboard</a></header>
+  <header><strong>🧩 Maya Maths · Adult Review</strong><span><a class="button" href="fraction-toolkit.html">Fraction Toolkit</a> <a class="button" href="parent.html">← Adult Dashboard</a></span></header>
   <main class="wrap">
     <section id="loading" class="card"><h1>Opening the Adult Review Centre…</h1><p class="muted">Checking secure adult access and loading Maya’s saved programme.</p></section>
     <section id="review" class="hidden">
@@ -53,7 +53,7 @@
         <div id="tableLibrary" class="table-library"></div>
         <h3>Fractions lesson status</h3>
         <p class="muted">Every planned Fractions lesson is shown below. Only lessons marked <b>Ready to review</b> can be opened or assigned to Maya. Grey lessons remain under development.</p>
-        <div class="status-summary"><span class="development-status ready">17 ready to review</span><span class="development-status pending">6 under development</span></div>
+        <div class="status-summary"><span class="development-status ready">21 ready to review</span><span class="development-status pending">3 under development</span></div>
         <div id="fractionLibrary" class="library"></div>
       </section>
     </section>
@@ -62,8 +62,9 @@
   <script>
     const $=s=>document.querySelector(s);
     const TABLES=[2,3,4,5,6,7,8,9];
-    const READY_FRACTIONS=new Set([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17]);
-    const FRACTIONS=[[0,'A','What is a fraction?'],[1,'A','Why fractions matter'],[2,'A','The whole'],[3,'A','Equal parts'],[4,'A','Halves'],[5,'A','Thirds'],[6,'A','Quarters'],[7,'A','Numerator & denominator'],[8,'B','Sixths'],[9,'B','Eighths'],[10,'B','Tenths'],[11,'B','Making one whole'],[12,'B','Compare & connect'],[13,'C','Equivalent fractions'],[14,'C','Simplifying fractions'],[15,'C','Compare & order'],[16,'C','Quarter pieces beyond one whole'],[17,'C','Like denominators'],[18,'C','Common denominators'],[19,'C','Unlike denominators'],[20,'C','Fraction of a quantity'],[21,'C','Whole number × fraction'],[22,'C','Fraction × fraction']];
+    const READY_FRACTIONS=new Set([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,181,19]);
+    const FRACTIONS=[[0,'A','What is a fraction?'],[1,'A','Why fractions matter'],[2,'A','The whole'],[3,'A','Equal parts'],[4,'A','Halves'],[5,'A','Thirds'],[6,'A','Quarters'],[7,'A','Numerator & denominator'],[8,'B','Sixths'],[9,'B','Eighths'],[10,'B','Tenths'],[11,'B','Making one whole'],[12,'B','Compare & connect'],[13,'C','Equivalent fractions'],[14,'C','Simplifying fractions'],[15,'C','Compare & order'],[16,'C','Quarter pieces beyond one whole'],[17,'C','Like denominators'],[18,'C','Finding a common denominator'],[181,'C','Converting to a common denominator'],[19,'C','Unlike denominators'],[20,'C','Fraction of a quantity'],[21,'C','Whole number × fraction'],[22,'C','Fraction × fraction']];
+    const fractionCode=id=>id===18?'18A':id===181?'18B':String(id);
     const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     async function start(){
       try{
@@ -76,7 +77,7 @@
         $('#assignedMultiplication').classList.toggle('hidden',!facts.length);
         $('#assignedFractions').innerHTML=assigned.length?assigned.map((id,i)=>{const x=FRACTIONS.find(f=>f[0]===id);if(!x)return'';return `<a class="lesson" href="fractions.html?mode=preview&cloud=1&lesson=${id}"><span><small>Assigned lesson ${i+1} · Part ${x[1]}</small><b>${esc(x[2])}</b></span><span class="go">Open →</span></a>`}).join(''):'<span class="status">No Fractions lessons are currently assigned.</span>';
         $('#tableLibrary').innerHTML=TABLES.map(f=>`<a class="table-card" href="multiplication.html?mode=review&cloud=1&table=${f}"><span class="development-status ready">Ready to review</span><h4>×${f} table</h4><p>Review teaching strategies, supported and independent practice, and challenge.</p><span class="go">Review table →</span></a>`).join('');
-        $('#fractionLibrary').innerHTML=FRACTIONS.map(([id,part,title])=>READY_FRACTIONS.has(id)?`<a class="lesson" href="fractions.html?mode=review&cloud=1&lesson=${id}"><span><small>Concept ${id} · Part ${part}</small><b>${esc(title)}</b></span><span class="lesson-side"><span class="development-status ready">Ready to review</span><span class="go">Review →</span></span></a>`:`<div class="lesson pending" aria-disabled="true"><span><small>Concept ${id} · Part ${part}</small><b>${esc(title)}</b></span><span class="lesson-side"><span class="development-status pending">Under development</span></span></div>`).join('');
+        $('#fractionLibrary').innerHTML=FRACTIONS.map(([id,part,title])=>READY_FRACTIONS.has(id)?`<a class="lesson" href="fractions.html?mode=review&cloud=1&lesson=${id}"><span><small>Concept ${fractionCode(id)} · Part ${part}</small><b>${esc(title)}</b></span><span class="lesson-side"><span class="development-status ready">Ready to review</span><span class="go">Review →</span></span></a>`:`<div class="lesson pending" aria-disabled="true"><span><small>Concept ${fractionCode(id)} · Part ${part}</small><b>${esc(title)}</b></span><span class="lesson-side"><span class="development-status pending">Under development</span></span></div>`).join('');
         $('#loading').classList.add('hidden');$('#review').classList.remove('hidden');
       }catch(e){console.error(e);$('#loading').innerHTML='<h1>Adult review could not be opened</h1><p>Please return to the Adult Dashboard and sign in again.</p><a class="button" href="parent.html">Return to Adult Dashboard</a>'}
     }
