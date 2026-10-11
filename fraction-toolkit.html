@@ -8,7 +8,7 @@
     :root{--ink:#18324a;--muted:#5e7183;--blue:#2576b9;--blue-pale:#eaf4fc;--green:#2b8a66;--green-pale:#e8f7f0;--gold:#b77712;--gold-pale:#fff5dc;--line:#cfdbe5;--paper:#f2f5f8}
     *{box-sizing:border-box}
     body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,Segoe UI,Arial,sans-serif;line-height:1.25}
-    .toolbar{position:sticky;top:0;z-index:2;display:flex;justify-content:center;padding:11px;background:var(--ink)}
+    .toolbar{position:sticky;top:0;z-index:2;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:11px;background:var(--ink)}
     .toolbar a{border-radius:9px;background:#fff;color:var(--ink);padding:9px 13px;font-weight:800;text-decoration:none}
     .sheet{width:210mm;min-height:297mm;margin:14px auto;padding:10mm;background:#fff;box-shadow:0 8px 28px #0002}
     .head{display:flex;justify-content:space-between;gap:14px;align-items:end;border-bottom:3px solid var(--ink);padding-bottom:7px}
@@ -41,7 +41,7 @@
   </style>
 </head>
 <body>
-  <div class="toolbar"><a href="fractions.html">← Return to Fractions</a></div>
+  <nav class="toolbar" aria-label="Toolkit navigation"><a href="index.html">← Maya Maths Home</a><a href="fractions.html">Return to Fractions</a></nav>
   <main class="sheet">
     <header class="head">
       <div><h1>Maya’s Fraction Operations Toolkit</h1><p>A one-page reminder: look at the sign, then use the matching rule.</p></div>
