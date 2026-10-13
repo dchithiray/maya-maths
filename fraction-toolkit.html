@@ -41,7 +41,19 @@
   </style>
 </head>
 <body>
-  <nav class="toolbar" aria-label="Toolkit navigation"><a href="index.html">← Maya Maths Home</a><a href="fractions.html">Return to Fractions</a></nav>
+  <nav class="toolbar" aria-label="Toolkit navigation" id="toolkitNavigation">
+  <a href="index.html">← Maya Maths Home</a>
+  <a href="fractions.html">Return to Fractions</a>
+</nav>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get('from') === 'learner') {
+    document.getElementById('toolkitNavigation').innerHTML =
+      '<a href="learner.html">← Back to My Lessons</a>';
+  }
+</script>
   <main class="sheet">
     <header class="head">
       <div><h1>Maya’s Fraction Operations Toolkit</h1><p>A one-page reminder: look at the sign, then use the matching rule.</p></div>
