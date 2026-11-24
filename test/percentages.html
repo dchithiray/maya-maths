@@ -1,0 +1,310 @@
+<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TEST · Maya Maths · Percentages</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.3"></script><script src="cloud-config.js"></script><script src="cloud.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;color:#17324d;background:#fffaf0;font:16px/1.45 "Trebuchet MS",Arial,sans-serif}main{max-width:850px;margin:auto;padding:14px}header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}progress{display:block;width:100%;height:18px;accent-color:#31875d}#progress-label,#step-label{font-size:.9rem;margin:7px 0}#stage{background:#fff;border:1px solid #d8e4ed;border-radius:16px;padding:16px}h1{font-size:1.5rem;margin:14px 0 10px}h2{font-size:1.25rem;margin:0 0 10px}p{margin:10px 0}.hundred-grid{display:grid;grid-template-columns:20px repeat(10,minmax(0,1fr));gap:3px;width:min(100%,290px);margin:12px auto}.square{display:block;aspect-ratio:1;border:1px solid #73958a;background:white}.shaded{background:#126658!important;color:white}.row-number{display:grid;place-items:center;font-size:.8rem}.fraction-bar{display:flex;gap:3px;margin:12px 0}.fraction-bar span{flex:1;min-height:38px;background:#e6eee9;text-align:center;padding:8px 2px;border:1px solid #73958a}.counter-set,.choices,.select-parts,.offers{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.shops{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0}.shop-panel{padding:12px;border:1px solid #d8e4ed;border-radius:10px;background:#f8fbfd}.shop-panel h3{margin:0 0 8px}.shop-panel input{width:100%;max-width:none}.shop-panel p{margin:6px 0}.counter-set span{font-size:1.5rem}.select-rows{display:grid;gap:3px;width:min(100%,320px);margin:12px auto}.select-rows button{display:grid;grid-template-columns:52px repeat(10,minmax(0,1fr));align-items:center;gap:2px;padding:3px;min-height:26px}.select-rows button[aria-pressed=true] .square{background:#126658}.bundles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.bundles div{padding:10px;background:#e6eee9;border:1px solid #73958a;border-radius:6px}button{font:inherit;border:1px solid #73958a;border-radius:9px;background:white;color:#17324d;min-height:44px;padding:8px 13px;cursor:pointer}button[aria-pressed=true]{background:#126658;color:white}button:disabled{opacity:.45;cursor:default}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #af6016;outline-offset:2px}label{display:block;margin:8px 0}input{display:block;width:min(100%,180px);font:inherit;padding:6px;border:1px solid #73958a;border-radius:6px}textarea{display:block;width:100%;font:inherit;padding:6px;border:1px solid #73958a;border-radius:6px}nav{position:sticky;bottom:0;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;padding:10px 0;background:#fffaf0;border-top:1px solid #d8e4ed}#continue,#next{background:#347fb8;color:white}#feedback{min-height:24px}a{color:inherit}[hidden]{display:none!important}@media(max-width:450px){main{padding:9px}#stage{padding:12px}.bundles{grid-template-columns:repeat(2,1fr)}nav button{flex:1;padding:8px}}
+</style><meta name="robots" content="noindex,nofollow"></head><body><main><header><strong>🧩 Maya Maths · Percentages</strong><a id="return">Return</a></header>
+<h1 id="lesson-title"></h1><p id="progress-label"></p><progress id="progress" max="1" value="0" aria-label="Lesson completion"></progress>
+<p id="step-label"></p><section id="stage"></section><p id="feedback" role="status"></p>
+<nav aria-label="Lesson navigation"><button type="button" id="hint" hidden>Give me a hint</button><button type="button" id="check">Check my answer</button><button type="button" id="continue" disabled>Continue</button><button type="button" id="next" hidden disabled>Next lesson</button></nav>
+</main><script>const LESSONS={"start": [{"type": "read", "title": "What is a percentage?", "prompt": "A percentage describes a share of a whole, just as a fraction does. Percent means \u201cout of 100\u201d.", "grid": 50, "detail": "Half the grid is shaded. \u00bd = 50/100 = 50%. These all name the same share."}, {"type": "choice", "title": "A sale sign", "prompt": "A shop displays \u201c50% off\u201d. What is the whole that the discount refers to?", "options": ["The original price", "The amount saved", "The number of shops"], "answer": 0, "hint": "The discount is a share of the price before the sale.", "grid": 50, "detail": "The whole is the original $20 price. Saving 50% means saving half: $10. You pay the remaining $10.", "worked": true}, {"type": "choice", "title": "A test result", "prompt": "Maya earns 16 marks out of 20, or 80%. What is the whole in this test?", "options": ["The 16 marks earned", "The 20 possible marks", "100 test questions"], "answer": 1, "hint": "The whole is every mark that could have been earned.", "grid": 80, "detail": "80% describes the same share as 80 out of 100. A test does not need to have 100 marks.", "worked": true}, {"type": "choice", "title": "A neighbour survey", "prompt": "In a survey of 10 neighbours, 6 said people on their street were friendly. Which percentage describes this share?", "options": ["6%", "60%", "10%"], "answer": 1, "hint": "Six of ten is the same share as sixty of a hundred.", "grid": 60}, {"type": "explore", "title": "One share, three forms", "prompt": "Explore each label. Does the shaded part change?", "grid": 50, "labels": ["Fraction \u00b7 \u00bd", "Decimal \u00b7 0.5", "Percentage \u00b7 50%"], "details": ["50/100 simplifies to \u00bd. Half of the whole is shaded.", "Five of the ten rows are shaded. Five tenths is written 0.5.", "Fifty of the hundred squares are shaded. Fifty out of 100 is 50%."]}, {"type": "shade", "title": "Build two tenths", "prompt": "Select two rows. Each row contains ten squares.", "target": 2, "parts": 10, "hint": "Two tenths means two of the ten equal rows."}, {"type": "forms", "title": "Name your shaded share", "prompt": "Use the same shaded part in all three answers. For the fraction, count shaded whole rows out of the 10 rows. Write that share as a decimal. For the percentage, count shaded squares out of the 100 squares.", "grid": 20, "hint": "There are 2 shaded rows out of 10 rows. Each row contains 10 squares, so the same shaded part covers 20 of the 100 squares."}, {"type": "number", "title": "Read a percentage", "prompt": "Six of the hundred squares are shaded. What percentage is shaded?", "answer": 6, "hint": "Percent means out of 100.", "grid": 6, "suffix": "%"}, {"type": "choice", "title": "Compare two shares", "prompt": "Which covers more of the same whole, 6% or 10%?", "options": ["6%", "10%", "The same amount"], "answer": 1, "hint": "Compare six squares with ten squares out of the same hundred.", "grid": 10, "detail": "The grid shows 10%. Imagine removing four shaded squares to show 6%."}, {"type": "number", "title": "Try a fresh example", "prompt": "Seven squares are shaded. What percentage is shaded? Explain how you know.", "answer": 7, "hint": "Count the selected squares out of the hundred.", "grid": 7, "suffix": "%", "reason": true}], "A1": [{"type": "choice", "title": "Find the whole", "prompt": "This bar has four equal parts. What is the whole?", "options": ["All four parts together", "One part", "Only the shaded parts"], "answer": 0, "hint": "The whole includes shaded and unshaded parts.", "bar": [4, 0]}, {"type": "parts", "title": "Show half of a bar", "prompt": "Select half of the four equal bar parts.", "parts": 4, "target": 2, "hint": "Split four equal parts into two equal groups. Select one group."}, {"type": "parts", "title": "Show half of a collection", "prompt": "The whole collection has eight counters. Select half of them.", "parts": 8, "target": 4, "counters": true, "hint": "Share eight counters equally into two groups. Select one group."}, {"type": "explain", "title": "Explain half", "prompt": "In the bar, 2 parts were shaded and 2 were unshaded. In the collection, 4 counters were shaded and 4 were unshaded. Why do both show half?", "hint": "Use the picture or your previous answers to explain the connection.", "bar": [4, 2], "counters": [8, 4]}], "A2": [{"type": "number", "title": "Find the whole grid", "prompt": "There are ten rows with ten squares in each row. Use multiplication to find the total. Explain what each 10 represents.", "answer": 100, "hint": "Use 10 \u00d7 10.", "grid": 0, "reason": true}, {"type": "count", "title": "Check another way", "prompt": "Check your multiplication by counting one row at a time in tens.", "grid": 0}, {"type": "choice", "title": "Name one square", "prompt": "The whole contains 100 equal squares. What fraction of the whole is one square?", "options": ["1/10", "1/100", "1/2"], "answer": 1, "hint": "The denominator counts all the equal parts in the whole.", "grid": 1}], "A3": [{"type": "number", "title": "Count the shaded squares", "prompt": "Five rows are shaded. Each row has ten squares. How many squares are shaded?", "answer": 50, "hint": "Multiply five shaded rows by ten squares per row.", "grid": 50}, {"type": "number", "title": "Connect half and 50%", "prompt": "What percentage of this whole grid is shaded?", "answer": 50, "hint": "Half covers 50 of the 100 squares. Percent means out of 100.", "grid": 50, "suffix": "%", "detail": "The same shaded half is \u00bd, 50/100 and 50%.", "worked": true}, {"type": "number", "title": "Use a new whole", "prompt": "What is 50% of 36 counters?", "answer": 18, "hint": "50% means half. Split 36 into two equal groups."}, {"type": "explain", "title": "Explain the connection", "prompt": "Why can you find 50% of 36 by halving it, even though the whole is not 100?", "hint": "Use the picture or your previous answers to explain the connection.", "bar": [2, 1]}], "A4": [{"type": "number", "title": "One quarter", "prompt": "One of four equal quarters is shaded. What percentage of the whole is shaded?", "answer": 25, "hint": "The shaded quarter has five rows of five squares: 25 out of 100.", "grid": 25, "quarters": true, "suffix": "%"}, {"type": "number", "title": "Three quarters", "prompt": "Three of four equal quarters are shaded. What percentage is shaded?", "answer": 75, "hint": "Each quarter is 25%. Combine three quarters.", "grid": 75, "quarters": true, "suffix": "%"}, {"type": "number", "title": "Use a new whole", "prompt": "What is 25% of 36 counters?", "answer": 9, "hint": "25% means one quarter. Divide 36 into four equal groups."}, {"type": "explain", "title": "Explain quarters", "prompt": "Explain why one quarter is 25% and three quarters is 75%.", "hint": "Use the picture or your previous answers to explain the connection.", "bar": [4, 3]}], "fair": [{"type": "choice", "title": "Estimate before calculating", "prompt": "You have 36 fruit cups. The food stall needs 25%. Would you send more, less or the same as half? Explain why.", "options": ["More than half", "Less than half", "The same as half"], "answer": 1, "hint": "Half is 50%. Compare 25% with 50%.", "reason": true}, {"type": "number", "title": "Share the fruit cups", "prompt": "You have 36 fruit cups. The food stall needs 25% of them. How many fruit cups should go to the food stall? Explain your method.", "answer": 9, "hint": "25% is one quarter. Divide 36 by four.", "reason": true}, {"type": "number", "title": "What is left?", "prompt": "The whole collection has 36 fruit cups, shared into four equal bundles of 9. The food stall receives one bundle (25%). What percentage of the original collection is left for the other stalls?", "answer": 75, "hint": "Each of the four equal bundles is 25%. Three bundles remain.", "bundles": true, "suffix": "%"}, {"type": "explain", "title": "Check a helper\u2019s claim", "prompt": "There were 36 fruit cups. The food stall received 9, leaving 27. A helper says \u201cThere are 27 fruit cups left, so 27% is left.\u201d Explain what is wrong with that reasoning.", "hint": "Use the picture or your previous answers to explain the connection.", "bundles": true, "detail": "The original whole was 36 fruit cups. One of four equal bundles was sent; three bundles remain."}], "shop": [{"type": "choice", "title": "Compare without calculating", "prompt": "Will paying 50% of $30 cost more, less or the same as paying 50% of $40? Explain without finding either price.", "options": ["More", "Less", "The same"], "answer": 1, "hint": "Both amounts are halved. Compare the original wholes.", "reason": true, "compare": true}, {"type": "prices", "title": "Compare offers with the same starting price", "prompt": "Two shops sell the same backpack. Shop A originally charges $40 and offers 50% off. Shop B originally charges $40 and offers 20% off. Work out both savings and the prices you would pay. Which shop would you choose? Explain using the final prices.", "prices": [40, 40], "options": ["Shop A", "Shop B", "They cost the same"], "answer": 0, "reason": true, "hint": "For Shop A, halve the original price to find the saving. For Shop B, find 10% of the original price and double it. Subtract each saving before comparing.", "detail": "Shop A: save $20, pay $20. Shop B: save $8, pay $32. Compare the amounts paid.", "worked": true}, {"type": "prices", "title": "Compare offers with different starting prices", "prompt": "Two shops sell the same backpack. Shop A originally charges $80 and offers 50% off. Shop B originally charges $40 and offers 20% off. Work out both savings and the prices you would pay. Which shop would you choose? Explain using the final prices.", "prices": [80, 40], "options": ["Shop A", "Shop B", "They cost the same"], "answer": 1, "reason": true, "hint": "For Shop A, halve the original price to find the saving. For Shop B, find 10% of the original price and double it. Subtract each saving before comparing.", "detail": "Shop A: save $40, pay $40. Shop B: save $8, pay $32. Compare the amounts paid.", "worked": true}, {"type": "explain", "title": "Check a sales claim", "prompt": "Shop A starts at $80 and offers 50% off, so you pay $40. Shop B starts at $40 and offers 20% off, so you pay $32. Someone says \u201cA bigger percentage discount always gives a lower price.\u201d Use these offers to explain why this claim is wrong.", "hint": "The percentage tells you a share of the original price. Compare the original prices as well as the discount percentages."}]};
+(() => {
+ const params=new URLSearchParams(location.search);
+ let authorised=false,sessionTimer;
+ const draftKey='mayaPercentagesDrafts:'+window.MAYA_CLOUD_CONFIG.learnerId;
+ function localDrafts(){try{return JSON.parse(localStorage.getItem(draftKey)||'{}')}catch{return {}}}
+ function saveLocalDraft(lessonId,record,pending){
+  try{const all=localDrafts();all[lessonId]={record,pending};localStorage.setItem(draftKey,JSON.stringify(all));}catch{}
+ }
+
+ const id=params.get('lesson')||'start', review=['review','preview'].includes(params.get('mode'));
+ const steps=LESSONS[id];
+ const titles={start:'Start here · Percentages in everyday life',A1:'A1 · Find the whole and show half',A2:'A2 · Build the hundred grid',A3:'A3 · Why is half 50%?',A4:'A4 · Explore quarters',fair:'Food Stall · Share the fruit cups',shop:'Shop Sale · Compare discounts'};
+ document.getElementById('lesson-title').textContent=titles[id]||'Lesson unavailable';
+ const byId=id=>document.getElementById(id);
+ let hintUsed=false;
+ let index=0,checked=false,choice=null,selected=new Set(),visited=new Set(),count=0,finished=false;
+ const frameStatus=byId('feedback'),stage=byId('stage');
+ let savedLessons={},completedActivities=new Set(),drafts={},isRendering=false,saveChain=Promise.resolve();
+ function capture(){
+  const fields={};stage.querySelectorAll('input,textarea').forEach(field=>{if(field.name)fields[field.name]=field.value;});
+  return {fields,hintUsed,choice,selected:[...selected],visited:[...visited],count,checked};
+ }
+ function persist(){
+  if(review||!authorised||isRendering||!steps)return saveChain;
+  if(!finished)drafts[index]=capture();
+  const priorCompleted=savedLessons[id]?.status==='completed';
+  savedLessons[id]={status:finished||priorCompleted?'completed':'in-progress',index,checked,completedActivities:[...completedActivities],total:steps.length,activityCount:index+(checked?1:0),drafts:JSON.parse(JSON.stringify(drafts)),updatedAt:new Date().toISOString()};
+  const snapshot=JSON.parse(JSON.stringify(savedLessons[id]));
+  saveLocalDraft(id,snapshot,true);
+  saveChain=saveChain.catch(()=>{}).then(async()=>{
+   await MayaCloud.saveLessonProgress('percentages',id,snapshot);
+   const local=localDrafts()[id];
+   if(local&&JSON.stringify(local.record)===JSON.stringify(snapshot))saveLocalDraft(id,snapshot,false);
+  });
+  saveChain.catch(()=>message('Your work is on screen, but progress could not be saved in this browser.'));
+  return saveChain;
+ }
+ function restore(){
+  const draft=drafts[index];if(!draft)return;
+  for(const [name,text] of Object.entries(draft.fields||{})){const field=stage.querySelector('[name="'+name+'"]');if(field)field.value=text;}
+  hintUsed=Boolean(draft.hintUsed);choice=draft.choice??null;selected=new Set(draft.selected||[]);visited=new Set(draft.visited||[]);count=draft.count||0;
+  stage.querySelectorAll('.choices button').forEach((button,i)=>button.setAttribute('aria-pressed',String(current().type==='explore'?visited.has(i):choice===i)));
+  stage.querySelectorAll('.select-rows button,.select-parts button,.counter-set button').forEach((button,i)=>{
+   button.setAttribute('aria-pressed',String(selected.has(i)));
+   if(current().counters===true)button.textContent=selected.has(i)?'●':'○';
+  });
+  if(current().type==='count'){
+   const button=stage.querySelector('button');button.disabled=count===10;
+   button.nextElementSibling.textContent=count?'Row '+count+' · '+count*10+' squares counted.':'Start with row 1.';
+  }
+  checked=Boolean(draft.checked);byId('continue').disabled=!checked;updateProgress();
+  if(checked)message('Your checked answer is saved. Choose Continue when ready.');
+ }
+ function showComplete(){
+  finished=true;updateProgress();
+  stage.replaceChildren(el('h2','Lesson complete'),el('p','You have completed all '+steps.length+' activities.'));
+  const revisit=el('button','Review this lesson',{type:'button'});
+  revisit.onclick=()=>{finished=false;index=0;drafts={};render();};stage.append(revisit);
+  message('Choose Next lesson when you are ready.');
+  byId('continue').hidden=true;byId('check').hidden=true;byId('hint').hidden=true;
+  byId('next').hidden=false;byId('next').disabled=false;
+ }
+
+ function message(text){frameStatus.textContent=text;}
+ function el(tag,text,attributes={}){
+  const node=document.createElement(tag);if(text!==null)node.textContent=text;
+  for(const [name,value] of Object.entries(attributes))node.setAttribute(name,String(value));
+  return node;
+ }
+ function grid(shaded,quarters=false){
+  const node=el('div',null,{class:'hundred-grid',role:'img','aria-label':shaded+' shaded squares out of 100'});
+  for(let row=0;row<10;row++){
+   node.append(el('span',row+1,{class:'row-number','aria-hidden':'true'}));
+   for(let col=0;col<10;col++){
+    const quad=Math.floor(row/5)*2+Math.floor(col/5);
+    node.append(el('span','',{class:'square'+((quarters?quad<shaded/25:row*10+col<shaded)?' shaded':''),'aria-hidden':'true'}));
+   }
+  }
+  return node;
+ }
+ function bar(parts,shaded){
+  const node=el('div',null,{class:'fraction-bar',role:'img','aria-label':shaded+' shaded out of '+parts+' equal bar parts'});
+  for(let i=0;i<parts;i++)node.append(el('span',i<shaded?'Shaded':'',{class:i<shaded?'shaded':''}));
+  return node;
+ }
+ function input(name,label,container=stage){
+  const wrap=el('label',label),field=el('input',null,{name,type:'text',inputmode:name==='fraction'?'text':'decimal',autocomplete:'off'});
+  wrap.append(field);container.append(wrap);return field;
+ }
+ function renderChoices(step){
+   const group=el('div',null,{class:'choices',role:'group','aria-label':'Your answer'});
+   step.options.forEach((option,i)=>{
+    const button=el('button',option,{type:'button','aria-pressed':'false'});
+    button.onclick=()=>{choice=i;[...group.children].forEach((item,j)=>item.setAttribute('aria-pressed',String(i===j)));available(false);message('');const worked=stage.querySelector('[data-worked]');if(worked)worked.hidden=true;};
+    group.append(button);
+   });stage.append(group);
+  }
+ function reasoning(label='Explain your thinking'){
+  const wrap=el('label',label),text=el('textarea',null,{name:'reason',rows:2});
+  wrap.append(text);stage.append(wrap);
+ }
+ function current(){return steps[index];}
+ function updateProgress(){
+  byId('progress').max=steps.length;
+  byId('progress').value=finished?steps.length:index+(checked?1:0);
+  byId('progress-label').textContent=(finished?steps.length:index+(checked?1:0))+' of '+steps.length+' activities complete';
+ }
+ function available(value){
+  checked=value;byId('continue').disabled=!value;updateProgress();persist();
+ }
+ function render(){
+  isRendering=true;
+  const step=current();hintUsed=false;byId('check').disabled=false;byId('hint').disabled=false;checked=false;choice=null;selected=new Set();visited=new Set();count=0;
+  stage.replaceChildren();message('');
+  byId('step-label').textContent='Activity '+(index+1)+' of '+steps.length;
+  stage.append(el('h2',step.title),el('p',step.prompt));
+  byId('check').hidden=['read','explore','count'].includes(step.type);
+  byId('hint').hidden=!step.hint;
+  byId('continue').hidden=false;byId('next').hidden=true;byId('next').disabled=true;
+  if(step.grid!==undefined)stage.append(grid(step.grid,step.quarters));
+  if(step.bar)stage.append(bar(...step.bar));
+  if(Array.isArray(step.counters)){
+   const [total,shaded]=step.counters,node=el('div',null,{class:'counter-set',role:'img','aria-label':shaded+' of '+total+' counters selected'});
+   for(let i=0;i<total;i++)node.append(el('span',i<shaded?'●':'○'));stage.append(node);
+  }
+  if(step.bundles){
+   const row=el('div',null,{class:'bundles'});
+   for(let i=0;i<4;i++)row.append(el('div',(i===0?'Sent':'Left')+' · 9 fruit cups',{class:i===0?'shaded':''}));
+   stage.append(row);
+  }
+  if(step.compare){
+   for(const price of [30,40]){
+    stage.append(el('p','$'+price+' whole'));
+    const visual=bar(2,1);visual.style.width=(price/40*100)+'%';stage.append(visual);
+   }
+  }
+  if(step.detail&&!step.worked)stage.append(el('p',step.detail,{class:'detail'}));
+  if(step.type==='read')available(true);
+  if(step.type==='explore'){
+   const row=el('div',null,{class:'choices'}),detail=el('p','Select each of the three labels.');
+   step.labels.forEach((label,i)=>{
+    const button=el('button',label,{type:'button','aria-pressed':'false'});
+    button.onclick=()=>{visited.add(i);button.setAttribute('aria-pressed','true');detail.textContent=step.details[i];available(visited.size===step.labels.length);};
+    row.append(button);
+   });stage.append(row,detail);
+  }
+  if(['shade','parts'].includes(step.type)){
+   const row=el('div',null,{class:step.type==='shade'?'select-rows':step.counters?'counter-set':'select-parts'});
+   for(let i=0;i<step.parts;i++){
+    const button=el('button',step.type==='shade'?'Row '+(i+1):step.counters?'○':'Part '+(i+1),{type:'button','aria-pressed':'false'});
+    if(step.type==='shade')for(let j=0;j<10;j++)button.append(el('span','',{class:'square','aria-hidden':'true'}));
+    button.onclick=()=>{
+     if(selected.has(i))selected.delete(i);else selected.add(i);
+     button.setAttribute('aria-pressed',String(selected.has(i)));
+     if(step.counters)button.textContent=selected.has(i)?'●':'○';
+     available(false);message(selected.size+' selected.');
+    };
+    row.append(button);
+   }stage.append(row);
+  }
+  if(step.type==='choice')renderChoices(step);
+  if(step.type==='number')input('answer','Your answer'+(step.suffix?' ('+step.suffix+')':''));
+  if(step.type==='forms'){
+   input('fraction','Fraction · shaded whole rows out of 10 rows');input('decimal','Decimal · the same shaded share');input('percent','Percentage (%) · shaded squares out of 100');
+  }
+  if(step.type==='prices'){
+   const shops=el('div',null,{class:'shops','aria-label':'Compare the two shops'});
+   ['A','B'].forEach((shop,i)=>{
+    const panel=el('section',null,{class:'shop-panel','aria-label':'Shop '+shop});
+    panel.append(el('h3','Shop '+shop),el('p','Original price: $'+step.prices[i]),el('p','Discount: '+(i===0?'50%':'20%')));
+    const save=input('save'+shop,'Amount saved ($)',panel);
+    const pay=input('pay'+shop,'Price you pay ($)',panel);
+    save.setAttribute('aria-label','Shop '+shop+' · amount saved ($)');
+    pay.setAttribute('aria-label','Shop '+shop+' · price you pay ($)');
+    shops.append(panel);
+   });
+   stage.append(shops);
+   renderChoices(step);
+  }
+  if(step.type==='count'){
+   const status=el('p','Start with row 1.'),button=el('button','Count the next row',{type:'button'});
+   button.onclick=()=>{
+    count++;persist();status.textContent='Row '+count+' · '+count*10+' squares counted.';
+    if(count===10){available(true);button.disabled=true;message('10 × 10 and counting ten rows of ten both give 100.');}
+   };stage.append(button,status);
+  }
+  if(step.reason||step.type==='explain')reasoning();
+  if(step.detail&&step.worked)stage.append(el('p',step.detail,{class:'detail','data-worked':'',hidden:''}));
+  available(step.type==='read');
+  restore();isRendering=false;persist();
+  stage.querySelector('h2').focus?.({preventScroll:true});
+  window.scrollTo(0,0);
+ }
+ function value(name){return stage.querySelector('[name="'+name+'"]')?.value.trim()||'';}
+ function num(name){
+  const text=value(name);
+  if(!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(text))return NaN;
+  return Number(text);
+ }
+ function validate(){
+  if(!authorised)return;
+  const step=current();let correct=false,feedback='Check your answer. '+(step.hint||'');
+  if(step.type==='number')correct=num('answer')===step.answer;
+  if(step.type==='choice')correct=choice===step.answer;
+  if(['parts','shade'].includes(step.type))correct=selected.size===step.target;
+  if(step.type==='forms'){
+   const match=value('fraction').match(/^(\d+)\s*\/\s*(\d+)$/);
+   if(!match||Number(match[2])===0||Number(match[1])/Number(match[2])!==0.2)feedback='Two of the ten rows are shaded. Check your fraction.';
+   else if(num('decimal')!==0.2)feedback='The fraction matches. Check the decimal for two tenths.';
+   else if(num('percent')!==20)feedback='The fraction and decimal match. How many of the hundred squares are shaded?';
+   else{correct=true;feedback=Number(match[2])===100?'Your fraction counts squares: 20/100. Counting whole rows gives 2/10. Both describe the same shaded part: 2/10 = 20/100 = 0.2 = 20%.':'Counting rows gives 2/10. The same part covers 20/100 squares: 2/10 = 20/100 = 0.2 = 20%. .2, .20 and 0.20 are also accepted.';}
+  }
+  if(step.type==='prices'){
+   const [a,b]=step.prices,expected={saveA:a/2,payA:a/2,saveB:b/5,payB:b*0.8};
+   const pricesCorrect=Object.entries(expected).every(([name,amount])=>Math.abs(num(name)-amount)<0.001);
+   correct=pricesCorrect&&choice===step.answer;
+   if(pricesCorrect&&!correct)feedback='Your calculated prices match. Compare the final prices and select the cheaper shop.';
+  }
+  if(step.type==='explain')correct=Boolean(value('reason'));
+  if(correct&&(step.reason||step.type==='explain')&&!value('reason')){
+   available(false);message('Add your explanation, then check your answer.');stage.querySelector('textarea').focus();return;
+  }
+  if(!review){
+   const answered=step.type==='choice'?choice!==null:step.type==='parts'||step.type==='shade'?selected.size>0:step.type==='explain'?Boolean(value('reason')):[...stage.querySelectorAll('input')].some(field=>field.value.trim());
+   if(answered)MayaCloud.recordEvent('percentages','attempt',step.title,{
+    lessonId:id,activity:index+1,question:step.prompt,correct,supported:hintUsed,
+    answer:capture().fields,choice,selected:[...selected]
+   }).catch(()=>message('The answer is on screen, but this attempt could not be saved.'));
+  }
+  available(correct);
+  const worked=stage.querySelector('[data-worked]');if(worked)worked.hidden=!correct;
+  message(correct?(step.type==='forms'?feedback:step.type==='explain'?'Your explanation is recorded for Tutor review. Choose Continue.':'Correct. Choose Continue when you are ready.'):feedback);
+ }
+ stage.addEventListener('input',()=>{available(false);message('');const worked=stage.querySelector('[data-worked]');if(worked)worked.hidden=true;});
+ byId('check').onclick=validate;
+ byId('hint').onclick=()=>{hintUsed=true;message(current().hint);persist();};
+ byId('continue').onclick=async()=>{
+  if(!authorised||!checked||finished)return;
+  completedActivities.add(index);drafts[index]=capture();
+  if(index<steps.length-1){index++;render();return;}
+  showComplete();await persist();
+  if(!review){
+   try{await MayaCloud.recordEvent('percentages','lesson_complete',id,{lessonId:id,activities:steps.length});}catch{message('Lesson complete. The result could not be saved in this browser.');}
+  }
+ };
+ byId('next').onclick=async()=>{
+  if(!authorised||!finished)return;
+  try{await persist();}catch{message('Your work is saved on this device. Reconnect before continuing.');return;}
+  if(review){location.href='parent.html';return;}
+  const programme=await MayaCloud.assignment(),queue=programme.percentages||[],next=queue[queue.indexOf(id)+1];
+  location.href=next?'percentages.html?mode=learner&lesson='+encodeURIComponent(next):'learner.html';
+ };
+ byId('return').onclick=async event=>{
+  event.preventDefault();
+  try{await persist();location.href=review?'parent.html':'learner.html';}
+  catch{message('Your work is saved on this device. Reconnect and try returning again.');}
+ };
+ async function start(){
+  byId('return').href=review?'parent.html':'learner.html';byId('return').textContent=review?'Return to Tutor library':'Learner home';
+  try{
+   if(!['learner','review','preview'].includes(params.get('mode'))){location.replace('learner.html');return;}
+   if(review||params.get('mode')==='preview'){
+    if(!await MayaCloud.adultRole()){const session=await MayaCloud.session();location.replace(session&&!session.user?.email?'learner.html':'parent.html');return;}
+   }else{
+    const session=await MayaCloud.session();
+    if(session?.user?.email&&await MayaCloud.adultRole()){location.replace('review.html');return;}
+    const until=await MayaCloud.learnerSessionStatus();
+    if(!until){location.replace('learner.html?locked=1');return;}
+    const remaining=new Date(until).getTime()-Date.now();
+    if(remaining<=0){location.replace('learner.html?locked=1');return;}
+    sessionTimer=setTimeout(()=>{authorised=false;location.replace('learner.html?locked=1');},remaining);
+    const lock=document.createElement('button');lock.type='button';lock.textContent='Lock now';
+    lock.onclick=async()=>{authorised=false;lock.disabled=true;try{await MayaCloud.endLearnerSession();location.replace('learner.html');}catch{message('Could not lock the session. Try Lock now again.');lock.disabled=false;}};
+    document.querySelector('header').append(lock);
+   }
+   authorised=true;
+   const assignment=await MayaCloud.assignment();
+   if(!steps||!review&&!(assignment.percentages||[]).includes(id)){
+    stage.textContent='This lesson is not assigned. Return to Learner home.';byId('continue').disabled=true;byId('check').hidden=true;byId('hint').hidden=true;return;
+   }
+   if(!review){
+    const progress=await MayaCloud.progress('percentages');
+    savedLessons=progress?.data?.lessons||{};
+    let entry=savedLessons[id];
+    const local=localDrafts()[id];
+    if(entry?.status!=='completed'&&local?.pending&&local.record&&(!entry||local.record.index>=entry.index)){
+     entry=local.record;savedLessons[id]=entry;
+    }
+    if(entry&&Number.isInteger(entry.index)&&entry.index>=0&&entry.index<steps.length){
+     index=entry.index;drafts=entry.drafts||{};completedActivities=new Set(entry.completedActivities||[]);
+     if(entry.status==='completed'){showComplete();return;}
+    }
+   }
+   render();
+  }catch{stage.textContent='The programme could not be loaded. Return to Learner home.';byId('continue').disabled=true;}
+ }
+ byId('check').disabled=true;byId('hint').disabled=true;
+ stage.textContent='Loading lesson…';
+ start();
+})();
+</script></body></html>

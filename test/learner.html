@@ -1,0 +1,84 @@
+<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TEST · Maya’s Learning · Maya Maths</title><style>
+:root{--navy:#17324d;--blue:#347fb8;--green:#31875d;--cream:#fffaf0;--line:#d8e4ed;--muted:#60788d}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Trebuchet MS",Arial,sans-serif;color:var(--navy);background:linear-gradient(135deg,var(--cream),#eef7ff 70%)}header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;background:#ffffffd9;border-bottom:1px solid var(--line)}main{width:min(850px,calc(100% - 28px));margin:40px auto}.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:25px;box-shadow:0 12px 30px #17324d16;margin-bottom:18px}.hidden{display:none!important}.setup{max-width:560px;margin:auto}input{font:inherit;padding:12px;border:1px solid var(--line);border-radius:10px;width:100%;margin:8px 0}button{font:inherit;font-weight:900;border:0;border-radius:11px;padding:12px 16px;background:var(--blue);color:#fff}.secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.pin-input{font-size:1.4rem;letter-spacing:.35em;text-align:center;max-width:220px}.choices{display:grid;grid-template-columns:1fr 1fr;gap:18px}.choice{display:flex;flex-direction:column;min-height:250px;border-radius:22px;padding:24px;text-decoration:none;color:var(--navy);border:1px solid var(--line);background:#fff}.choice h2{font-size:2rem}.go{margin-top:auto;background:var(--blue);color:#fff;border-radius:12px;padding:12px;text-align:center;font-weight:900}.muted{color:var(--muted);line-height:1.5}.notice{background:#eef7ff;padding:12px;border-radius:11px}.assignment-title{display:block;margin-bottom:9px;color:var(--navy);font-size:1rem;font-weight:900}.fact-groups{display:grid;gap:8px;margin-bottom:18px}.fact-row{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap}.table-label{min-width:42px;padding:7px 5px;color:var(--navy);font-weight:900}.fact-chip{display:inline-block;padding:7px 10px;border:2px solid #8bb9da;border-radius:10px;background:#eef7ff;color:var(--navy);font-size:1rem;font-weight:900}.fraction-lessons{display:grid;gap:10px}.fraction-lesson{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px;border:2px solid var(--line);border-radius:14px;text-decoration:none;color:var(--navy);background:#fff}.fraction-lesson b{display:block;font-size:1.08rem}.fraction-lesson small{color:var(--muted)}.lesson-action{background:var(--green);color:#fff;padding:9px 12px;border-radius:10px;white-space:nowrap;font-weight:900}@media(max-width:650px){.choices{grid-template-columns:1fr}.choice{min-height:240px}.choice h2{margin-bottom:12px}.fraction-lesson{align-items:flex-start;flex-direction:column}.lesson-action{width:100%;text-align:center}}
+.progress-completed{background:#e8f7ef;border-color:#31875d}.progress-completed .lesson-status{color:#24704d}.progress-in-progress{background:#fff5dc;border-color:#bf8c35}.lesson-status{font-weight:900}.topic-progress{margin:6px 0;font-weight:900}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.3"></script><script src="cloud-config.js"></script><script src="cloud.js"></script><meta name="robots" content="noindex,nofollow"></head><body>
+<header><strong>🧩 Maya Maths</strong><span><a class="secondary" style="display:inline-block;text-decoration:none;border-radius:11px;padding:12px 16px;font-weight:900" href="fraction-toolkit.html">Fraction Toolkit</a>  <button id="lockNow" class="secondary hidden">🔒 Lock now</button></span></header><main><section id="setup" class="card setup hidden"><h1>Set up Maya’s learning</h1><p class="muted">A parent enters Maya’s private device code once. Maya will not need an email address or password.</p><input id="learnerCode" type="password" placeholder="Private device code"><button id="authorise">Authorise this device</button><p id="setupMessage" class="muted"></p></section>
+<section id="sessionLock" class="card setup hidden"><h1>Start Maya’s session</h1><p class="muted">A parent or tutor enters the private four-digit PIN. Maya Maths will unlock for 15 minutes.</p><input id="sessionPin" class="pin-input" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="••••"><br><button id="showSessionPin" class="secondary" type="button" aria-pressed="false">Show PIN</button> <button id="unlockSession">Start 15-minute session</button><p id="lockMessage" class="muted"></p></section>
+<section id="adultBlocked" class="card setup hidden"><h1>You’re signed in as an adult</h1><p class="muted">Adult checking should use the Review Centre so your activity is not recorded as Maya’s learning.</p><p><a class="go" style="display:block;text-decoration:none" href="review.html">Open Adult Review Centre →</a></p><button id="switchToLearner" class="secondary" type="button">Sign out and use this as Maya’s device</button></section>
+<section id="learning" class="hidden"><div class="card"><h1>Welcome back, Maya! ✨</h1><p id="programmeSummary" class="notice">Loading today’s programme…</p></div><div class="choices"><a id="multiplicationCard" class="choice" href="multiplication.html?mode=learner&cloud=1"><span style="font-size:3rem">✖️</span><h2>Multiplication</h2><p id="multiplicationSummary" class="muted"></p><span class="go">Start Multiplication</span></a><div id="subjectLessons" style="display:contents"></div></div></section></main>
+<script>
+const $=s=>document.querySelector(s);let lockTimer;
+function showOnly(id){for(const x of ['setup','sessionLock','adultBlocked','learning'])$('#'+x).classList.toggle('hidden',x!==id);$('#lockNow').classList.toggle('hidden',id!=='learning')}
+function scheduleLock(until){clearTimeout(lockTimer);let left=new Date(until).getTime()-Date.now();if(left<=0){showOnly('sessionLock');return}lockTimer=setTimeout(()=>{showOnly('sessionLock');$('#lockMessage').textContent='The session has ended. Ask an adult to start another session if needed.'},left)}
+const FRACTION_NAMES={"0": "What is a fraction?", "1": "Why fractions matter", "2": "The whole", "3": "Equal parts", "4": "Halves", "5": "Thirds", "6": "Quarters", "7": "Numerator & denominator", "8": "Sixths", "9": "Eighths", "10": "Tenths", "11": "Making one whole", "12": "Compare & connect", "13": "Equivalent fractions", "14": "Simplifying fractions", "15": "Compare & order", "16": "Quarter pieces beyond one whole", "17": "Like denominators", "18": "Finding a common denominator", "181": "Compare fractions with different denominators", "19": "Unlike denominators", "20": "Find a fraction of a number", "21": "Whole number \u00d7 fraction", "22": "Fraction \u00d7 fraction"};
+async function openLearning(a,until){
+ const topics=await MayaCloud.topics();
+ const selection=a.multiplication?.selections||{};
+ const facts=Object.values(selection).reduce((total,items)=>total+items.length,0);
+ let events=[];try{events=await MayaCloud.learningEvents(365);}catch{}
+ const progressByTopic={};
+ await Promise.all(topics.map(async topic=>{try{progressByTopic[topic.id]=(await MayaCloud.progress(topic.id))?.data||{}}catch{progressByTopic[topic.id]={}}}));
+ const cards=[];
+ for(const topic of topics.filter(topic=>topic.assignment_kind==='lessons')){
+  const selected=a.subjects?.[topic.id]?.lessons||[];
+  const data=progressByTopic[topic.id]||{},state=data.state||{};
+  const completed=new Set((state.mastered||[]).map(String)),attempted=new Set();
+  for(const event of events.filter(event=>event.subject===topic.id)){
+   const id=event.data?.lessonId;
+   if(id!==undefined){
+    if(event.event_type==='lesson_complete')completed.add(String(id));
+    if(event.event_type==='attempt')attempted.add(String(id));
+   }
+  }
+  for(const lessonId of selected){
+   const lesson=topic.lessons.find(lesson=>String(lesson.id)===String(lessonId));if(!lesson)continue;
+   const record=data.lessons?.[String(lessonId)]||data.lessonProgress?.[String(lessonId)]||state.lessonProgress?.[String(lessonId)];
+   let status='not-started',text='Not started';
+   if(record?.status==='completed'||completed.has(String(lessonId))){status='completed';text='Completed';}
+   else if(record||attempted.has(String(lessonId))||state.answers?.[lessonId]||
+     String(state.current)===String(lessonId)&&((state.stage||0)>0||state.entryMode)){
+    status='in-progress';text='In progress';
+    if(record?.total)text+=' · '+(record.activityCount||0)+' of '+record.total+' activities complete';
+   }
+   cards.push({topic,lesson,status,text});
+  }
+ }
+ showOnly('learning');scheduleLock(until);
+ const complete=cards.filter(card=>card.status==='completed').length,inProgress=cards.filter(card=>card.status==='in-progress').length;
+ $('#programmeSummary').textContent=complete+' of '+cards.length+' assigned lessons completed · '+inProgress+' in progress · '+(cards.length-complete-inProgress)+' not started.'+(facts?' Multiplication: '+facts+' selected facts.':'');
+ const container=$('#subjectLessons');container.replaceChildren();
+ for(const topic of topics){
+  const entries=cards.filter(card=>card.topic.id===topic.id);if(!entries.length)continue;
+  const section=document.createElement('section');section.className='choice';
+  const title=document.createElement('h2');title.textContent=topic.title;
+  const summary=document.createElement('p');summary.className='topic-progress';summary.textContent=entries.filter(card=>card.status==='completed').length+' of '+entries.length+' lessons completed';
+  const list=document.createElement('div');list.className='fraction-lessons';
+  for(const item of entries){
+   const link=document.createElement('a');link.className='fraction-lesson progress-'+item.status;
+   link.href=MayaCloud.lessonUrl(topic,item.lesson.id,'learner');
+   const label=document.createElement('span'),status=document.createElement('small'),name=document.createElement('b'),action=document.createElement('span');
+   status.className='lesson-status';status.textContent=(item.status==='completed'?'✓ ':'')+item.text;name.textContent=item.lesson.title;
+   action.className='lesson-action';action.textContent=item.status==='completed'?'Review lesson →':item.status==='in-progress'?'Continue lesson →':'Start lesson →';
+   label.append(status,name);link.append(label,action);list.append(link);
+  }
+  section.append(title,summary,list);container.append(section);
+ }
+ const summary=$('#multiplicationSummary');summary.replaceChildren();
+ const practice=events.filter(event=>event.subject==='multiplication'&&(!a.updated_at||event.occurred_at>=a.updated_at)).sort((x,y)=>new Date(y.occurred_at)-new Date(x.occurred_at)).find(event=>['attempt','practice_complete','challenge_complete'].includes(event.event_type));
+ const practiceText=practice?practice.event_type==='attempt'?'Practice in progress':'Practice round completed':'Not started';
+ const label=document.createElement('p');label.className='lesson-status';label.textContent=practiceText;summary.append(label);
+ for(const [factor,items] of Object.entries(selection)){
+  const row=document.createElement('div');row.className='fact-row';
+  const title=document.createElement('span');title.className='table-label';title.textContent='×'+factor;row.append(title);
+  for(const n of items){const chip=document.createElement('span');chip.className='fact-chip';chip.textContent=factor+' × '+n;row.append(chip);}
+  summary.append(row);
+ }
+ $('#multiplicationCard').style.display=facts?'flex':'none';
+ $('#multiplicationCard .go').textContent=practiceText==='Not started'?'Start Multiplication':practiceText==='Practice in progress'?'Continue Multiplication':'Practise again';
+}
+async function start(){try{let s=await MayaCloud.session();if(s?.user?.email&&await MayaCloud.adultRole()){showOnly('adultBlocked');return}if(!s&&localStorage.getItem('maya_cloud_learner'))await MayaCloud.ensureAnonymous();let a=await MayaCloud.assignment(),until=await MayaCloud.learnerSessionStatus();if(until)await openLearning(a,until);else showOnly('sessionLock')}catch{showOnly('setup');$('#setupMessage').textContent='This device is not authorised yet.'}}
+$('#authorise').onclick=async()=>{let code=$('#learnerCode').value.trim();if(!code)return;$('#setupMessage').textContent='Authorising…';try{await MayaCloud.claimLearner(code);showOnly('sessionLock');$('#lockMessage').textContent='Device authorised. Enter the session PIN to begin.'}catch(e){$('#setupMessage').textContent='The code was not recognised. Please ask a parent to check it.'}};
+$('#unlockSession').onclick=async()=>{let pin=$('#sessionPin').value.trim();if(!/^\d{4}$/.test(pin)){$('#lockMessage').textContent='Enter the four-digit PIN.';return}$('#lockMessage').textContent='Starting session…';try{let until=await MayaCloud.beginLearnerSession(pin),a=await MayaCloud.assignment();$('#sessionPin').value='';await openLearning(a,until)}catch(e){$('#lockMessage').textContent='That PIN was not recognised. Please ask a parent or tutor.'}};
+$('#showSessionPin').onclick=()=>{let field=$('#sessionPin'),show=field.type==='password';field.type=show?'text':'password';$('#showSessionPin').textContent=show?'Hide PIN':'Show PIN';$('#showSessionPin').setAttribute('aria-pressed',String(show));field.focus()};
+$('#switchToLearner').onclick=async()=>{await MayaCloud.signOut();location.reload()};
+$('#lockNow').onclick=async()=>{try{await MayaCloud.endLearnerSession()}catch{}showOnly('sessionLock');$('#lockMessage').textContent='Maya Maths is locked.'};start();
+</script></body></html>
